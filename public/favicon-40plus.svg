@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="40+">
+  <defs>
+    <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F8D77A"/>
+      <stop offset="55%" stop-color="#E7B84C"/>
+      <stop offset="100%" stop-color="#B67A1E"/>
+    </linearGradient>
+  </defs>
+  <circle cx="32" cy="32" r="30" fill="#124948"/>
+  <text
+    x="32"
+    y="38"
+    text-anchor="middle"
+    font-family="Arial, Helvetica, sans-serif"
+    font-size="22"
+    font-weight="700"
+    fill="url(#gold)"
+  >
+    40+
+  </text>
+</svg>

@@ -1,0 +1,233 @@
+/* BOTÓN FLOTANTE BLANCO */
+
+.floating-cart-button {
+  position: fixed;
+  top: 20%;        /* altura aprox. 3/4 superior, ajusta si quieres */
+  right: 2.5rem;
+  width: 72px;
+  height: 72px;
+  border-radius: 999px;
+  border: none;
+  background-color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.18);
+  cursor: pointer;
+  z-index: 40;
+}
+
+.floating-cart-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.floating-cart-badge {
+  position: absolute;
+  top: -4px;
+  right: -2px;
+  width: 26px;
+  height: 26px;
+  border-radius: 999px;
+  background-color: #eb632f;
+  color: #ffffff;
+  font-size: 0.85rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* PANEL DEL CARRITO (DERECHA, MEDIA PANTALLA) */
+
+.cart-panel-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  display: flex;
+  justify-content: flex-end;
+  z-index: 50;
+}
+
+.cart-panel {
+  height: 100vh;
+  width: min(50vw, 520px); /* aprox mitad */
+  background: #f6f0dd;
+  display: flex;
+  flex-direction: column;
+  border-radius: 24px 0 0 24px;
+  overflow: hidden;
+  box-shadow: -18px 0 45px rgba(0, 0, 0, 0.25);
+}
+
+/* HEADER VERDE */
+
+.cart-panel__header {
+  position: relative;
+  background: #124948;
+  color: #ffffff;
+  padding: 1.25rem 1.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.cart-panel__close {
+  border: none;
+  background: none;
+  color: #ffffff;
+  font-size: 1.35rem;
+  cursor: pointer;
+}
+
+/* Botón blanco dentro del header */
+.cart-panel__header-cart {
+  position: absolute;
+  right: 1.75rem;
+  top: 2.7rem;
+  transform: translateY(-50%);
+}
+
+.header-cart-button {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* CUERPO */
+
+.cart-panel__body {
+  flex: 1;
+  padding: 1.75rem;
+  overflow-y: auto;
+}
+
+.cart-panel__empty {
+  color: #124948;
+  opacity: 0.8;
+}
+
+/* ITEM */
+
+.cart-item {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  column-gap: 1.25rem;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.cart-item__image-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cart-item__image {
+  width: 140px; /* grande */
+  height: auto;
+}
+
+.cart-item__info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.cart-item__name {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #124948;
+}
+
+.cart-item__unit-price,
+.cart-item__subtotal {
+  font-size: 0.9rem;
+  color: #124948;
+}
+
+.cart-item__unit-price span,
+.cart-item__subtotal span {
+  font-weight: 600;
+}
+
+.cart-item__quantity {
+  margin-top: 0.4rem;
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  border: 1px solid #124948;
+  overflow: hidden;
+}
+
+.cart-item__quantity button {
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: #ffffff;
+  color: #124948;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.cart-item__quantity span {
+  padding: 0 1.2rem;
+  font-weight: 600;
+}
+
+.cart-item__remove {
+  border: none;
+  background: none;
+  color: #eb4a4a;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+/* FOOTER */
+
+.cart-panel__footer {
+  padding: 1.5rem 1.75rem 1.75rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.cart-panel__total-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: 600;
+  color: #124948;
+  margin-bottom: 0.5rem;
+}
+
+.cart-panel__total-value {
+  font-size: 1.1rem;
+}
+
+.cart-panel__checkout {
+  border: none;
+  border-radius: 999px;
+  padding: 0.95rem 1.5rem;
+  background: #eb632f;
+  color: #ffffff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.cart-panel__clear {
+  border: none;
+  background: none;
+  color: #eb4a4a;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
