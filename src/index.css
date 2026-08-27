@@ -3,214 +3,45 @@
 @tailwind utilities;
 
 :root {
-  --verde-oscuro: #124948;
-  --beige-claro: #F8F1E3;
-  --naranja-calido: #EB632F;
+  font-family: Inter, Avenir, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: #124948;
+  background: #f6f0dd;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  color-scheme: light;
 }
 
-html,
-#root {
-  background-color: var(--beige-claro);
+* { box-sizing: border-box; }
+
+html {
+  min-width: 0;
+  background: #f6f0dd;
+  scroll-behavior: smooth;
 }
 
-/* Tipografía global tipo checkout */
 body {
-  background-color: var(--beige-claro);
-  @apply text-[#124948] antialiased;
-  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-    sans-serif;
+  min-width: 0;
+  min-height: 100vh;
+  margin: 0;
+  background: #f6f0dd;
 }
 
-/* Clases para flip 3D */
-.perspective {
-  perspective: 1000px;
-}
-.preserve-3d {
-  transform-style: preserve-3d;
-}
-.backface-hidden {
-  backface-visibility: hidden;
-}
-.rotate-y-180 {
-  transform: rotateY(180deg);
+button,
+input,
+select { font: inherit; }
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 3px solid rgba(235, 99, 47, 0.42);
+  outline-offset: 3px;
 }
 
-/* Ejemplo de sombra suave */
-.card-soft-shadow {
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
-}
+img { display: block; max-width: 100%; }
 
-/* Por si quieres bordes suaves en el hero */
-.rounded-hero {
-  border-radius: 2.5rem;
-}
-
-.checkout-title {
-  margin-bottom: 1rem;
-  font-family: "Avenir", Inter, system-ui, sans-serif;
-  font-size: clamp(25px, 2vw, 31px);
-  font-weight: 900;
-  line-height: 1.1;
-  letter-spacing: 0.12em;
-  color: #f6f0dd;
-}
-
-.checkout-field {
-  position: relative;
-  display: block;
-  width: min(100%, 578px);
-}
-
-.checkout-field-label {
-  position: absolute;
-  left: 26px;
-  top: 8px;
-  z-index: 1;
-  font-family: "Avenir", Inter, system-ui, sans-serif;
-  font-size: 17px;
-  font-weight: 900;
-  line-height: 1.1;
-  letter-spacing: 0.12em;
-  color: #9b823e;
-}
-
-.checkout-control {
-  width: 100%;
-  min-height: 60px;
-  border: 0;
-  border-radius: 999px;
-  background: rgba(217, 217, 217, 0.2);
-  padding: 30px 28px 8px;
-  font-family: "Avenir", Inter, system-ui, sans-serif;
-  font-size: 18px;
-  font-weight: 500;
-  line-height: 1.1;
-  letter-spacing: 0.12em;
-  color: #f6f0dd;
-  outline: none;
-}
-
-.checkout-control::placeholder {
-  color: #f6f0dd;
-  opacity: 0.95;
-}
-
-.checkout-field:not(:has(.checkout-field-label)) .checkout-control {
-  min-height: 56px;
-  padding-top: 10px;
-}
-
-.checkout-control:focus {
-  box-shadow: 0 0 0 2px rgba(246, 240, 221, 0.32);
-}
-
-.attributes-stage {
-  --attributes-scale: min(100vw, 140.625vh);
-}
-
-.attributes-title {
-  font-family: "Avenir", Inter, system-ui, sans-serif;
-  font-size: calc(var(--attributes-scale) * 0.025694);
-  font-weight: 900;
-  line-height: 1.15;
-  letter-spacing: 0.05em;
-  text-align: center;
-}
-
-.attributes-note {
-  margin-top: 0.25rem;
-  font-family: "Avenir", Inter, system-ui, sans-serif;
-  font-size: calc(var(--attributes-scale) * 0.010417);
-  font-weight: 500;
-  line-height: 1.15;
-  letter-spacing: 0.05em;
-  text-align: center;
-}
-
-.attributes-description-title {
-  font-family: "Avenir", Inter, system-ui, sans-serif;
-  font-size: calc(var(--attributes-scale) * 0.026389);
-  font-weight: 900;
-  line-height: 1.15;
-  letter-spacing: 0.11em;
-  opacity: 0.95;
-  white-space: nowrap;
-}
-
-.attributes-description-body {
-  margin-top: calc(var(--attributes-scale) * 0.0208);
-  max-width: calc(var(--attributes-scale) * 0.3069);
-  font-family: "Avenir", Inter, system-ui, sans-serif;
-  font-size: calc(var(--attributes-scale) * 0.023611);
-  font-weight: 400;
-  line-height: 1.176;
-  letter-spacing: 0.04em;
-  opacity: 0.95;
-}
-
-.attributes-copy .attributes-left,
-.attributes-copy .attributes-right {
-  position: absolute;
-}
-
-.attributes-pure {
-  left: 6.736%;
-  top: 11.914%;
-  width: 18.461%;
-}
-
-.attributes-gmo {
-  left: 6.806%;
-  top: 47.559%;
-  width: 15.713%;
-}
-
-.attributes-gluten {
-  left: 7.778%;
-  top: 84.961%;
-  width: 16.736%;
-}
-
-.attributes-sugar {
-  left: 43.654%;
-  top: 8.406%;
-  width: 20.021%;
-}
-
-@media (min-width: 768px) and (max-width: 1023px) {
-  .attributes-stage {
-    max-width: calc(100vw - 2rem);
-  }
-
-  .attributes-title {
-    font-size: clamp(16px, 2.6vw, 24px);
-  }
-
-  .attributes-note {
-    font-size: clamp(8px, 1.45vw, 12px);
-  }
-
-  .attributes-pure {
-    left: 3.2%;
-    top: 11.5%;
-    width: 20%;
-  }
-
-  .attributes-gmo {
-    left: 4%;
-    top: 48%;
-    width: 16%;
-  }
-
-  .attributes-gluten {
-    left: 5%;
-    top: 85%;
-    width: 18%;
-  }
-
-  .attributes-sugar {
-    left: 43%;
-    top: 7.6%;
-    width: 22%;
-  }
+::selection {
+  background: #eb632f;
+  color: white;
 }
