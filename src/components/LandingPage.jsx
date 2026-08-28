@@ -2,8 +2,8 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import SiteHeader from "./SiteHeader.jsx";
 import productBack from "../assets/product_detail_figma_back_trimmed.png";
-import heroProduct from "../assets/editorial/producto-front-hd.png";
-import heroPodium from "../assets/editorial/producto-pedestal-only.png";
+import heroProduct from "../assets/editorial/hero-producto-final.png";
+import heroPodium from "../assets/editorial/hero-fondo.png";
 import ritualImage from "../assets/editorial/ritual-manana-40plus.jpg";
 import greenTable from "../assets/editorial/mesa-verde.jpg";
 import routineImage from "../assets/editorial/cafe-manana.jpg";
@@ -95,9 +95,37 @@ const LandingPage = () => {
           </div>
 
           <div className="landing-hero__visual product-campaign">
-            <img src={heroPodium} alt="" className="product-campaign__podium" aria-hidden="true" />
-            <span className="product-campaign__landing-shadow" aria-hidden="true" />
-            <img src={heroProduct} alt="Doypack de Colágeno Hidrolizado 40+" className="product-campaign__pack" />
+            <div className="product-campaign__artwork">
+              <img
+                src={heroPodium}
+                alt=""
+                width="1003"
+                height="1568"
+                className="product-campaign__podium"
+                aria-hidden="true"
+              />
+              <span className="product-campaign__contact-shadow" aria-hidden="true" />
+              <span className="product-campaign__impact-ring" aria-hidden="true" />
+              <div className="product-campaign__pack" role="img" aria-label="Doypack de Colágeno Hidrolizado 40+">
+                <img
+                  src={heroProduct}
+                  alt=""
+                  width="632"
+                  height="1005"
+                  className="product-campaign__pack-image"
+                  fetchPriority="high"
+                  aria-hidden="true"
+                />
+                <img
+                  src={heroProduct}
+                  alt=""
+                  width="632"
+                  height="1005"
+                  className="product-campaign__pack-shine"
+                  aria-hidden="true"
+                />
+              </div>
+            </div>
             <div className="product-campaign__facts" aria-label="Información principal del producto">
               <span><strong>200 g</strong><small>Contenido neto</small></span>
               <span><strong>20</strong><small>Porciones aprox.</small></span>
