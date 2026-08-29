@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useCart } from "../context/CartContext.jsx";
 import SiteHeader from "./SiteHeader.jsx";
-import productFront from "../assets/product_detail_figma_front_trimmed.png";
+import productFront from "../assets/editorial/hero-producto-final.png";
 import productBack from "../assets/product_detail_figma_back_trimmed.png";
 
 const product = {
@@ -9,6 +9,8 @@ const product = {
   name: "Colágeno Hidrolizado 40+",
   price: 69900,
 };
+
+const formatPrice = (value) => new Intl.NumberFormat("es-CO").format(value);
 
 const productSchema = {
   "@context": "https://schema.org",
@@ -27,9 +29,10 @@ const productSchema = {
 
 const ColagenoDetailPage = () => {
   const { addToCart, openCart } = useCart();
-  const [side, setSide] = useState("front");
+  const [side, setSide] = useState("both");
   const [quantity, setQuantity] = useState(1);
   const activeImage = side === "front" ? productFront : productBack;
+  const totalPrice = product.price * quantity;
 
   const handleAdd = () => {
     addToCart({ ...product, image: productFront }, quantity);
@@ -40,33 +43,51 @@ const ColagenoDetailPage = () => {
     <main className="product-page">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }} />
       <section className="product-hero">
-        <SiteHeader />
+        <SiteHeader logoVariant="green" />
 
         <div className="product-hero__grid">
           <div className="product-gallery product-detail-stage">
-            <span className="product-detail-stage__grid" />
             <span className="product-detail-stage__orange" />
             <span className="product-detail-stage__powder" />
-            {side === "front" && (
-              <img src={productBack} alt="" aria-hidden="true" className="product-gallery__support" />
+            {side === "both" ? (
+              <div className="product-gallery__duo" aria-label="Frente e información nutricional del producto">
+                <img
+                  src={productBack}
+                  alt="Información nutricional del Colágeno Hidrolizado 40+"
+                  className="product-gallery__duo-pack product-gallery__duo-pack--back"
+                />
+                <img
+                  src={productFront}
+                  alt="Frente del Colágeno Hidrolizado 40+"
+                  className="product-gallery__duo-pack product-gallery__duo-pack--front"
+                />
+              </div>
+            ) : (
+              <img
+                key={side}
+                src={activeImage}
+                alt={side === "front" ? "Frente del Colágeno Hidrolizado 40+" : "Información nutricional del Colágeno Hidrolizado 40+"}
+                className={`product-gallery__main product-swap product-swap--${side} ${side === "front" ? "product-gallery__main--front" : "product-gallery__main--back"}`}
+              />
             )}
-            <img
-              key={side}
-              src={activeImage}
-              alt={side === "front" ? "Frente del Colágeno Hidrolizado 40+" : "Información nutricional del Colágeno Hidrolizado 40+"}
-              className={`product-gallery__main product-swap ${side === "front" ? "product-gallery__main--front" : "product-gallery__main--back"}`}
-            />
             <div className="product-detail-stage__facts" aria-hidden="true">
               <span>Tipo I + III</span>
               <span>10 g / día</span>
               <span>Sin azúcar</span>
             </div>
             <div className="product-gallery__thumbs" aria-label="Vistas del producto">
-              <button type="button" className={side === "front" ? "is-active" : ""} onClick={() => setSide("front")}>
-                <img src={productFront} alt="Vista frontal" />
+              <button type="button" aria-pressed={side === "both"} className={side === "both" ? "is-active" : ""} onClick={() => setSide("both")}>
+                <span className="product-gallery__thumb-duo" aria-hidden="true">
+                  <img src={productBack} alt="" />
+                  <img src={productFront} alt="" className="product-gallery__thumb-front" />
+                </span>
+                <span>Ambos</span>
+              </button>
+              <button type="button" aria-pressed={side === "front"} className={side === "front" ? "is-active" : ""} onClick={() => setSide("front")}>
+                <img src={productFront} alt="Vista frontal" className="product-gallery__thumb-front" />
                 <span>Frente</span>
               </button>
-              <button type="button" className={side === "back" ? "is-active" : ""} onClick={() => setSide("back")}>
+              <button type="button" aria-pressed={side === "back"} className={side === "back" ? "is-active" : ""} onClick={() => setSide("back")}>
                 <img src={productBack} alt="Vista posterior" />
                 <span>Información</span>
               </button>
@@ -84,18 +105,22 @@ const ColagenoDetailPage = () => {
             <div className="product-facts">
               <span><strong>200 g</strong>Contenido neto</span>
               <span><strong>20</strong>Porciones aprox.</span>
-              <span><strong>9,2 g</strong>Proteína / porción</span>
+              <span><strong>Libre</strong>de GMO</span>
             </div>
 
             <div className="product-howto">
               <span>Cómo tomarlo</span>
-              <p>Mezcla 10 g en agua, café, té, jugo o smoothie. Una vez al día.</p>
+              <p>
+                Mezcla 10 g en agua, café, té, jugo o smoothie.<br />
+                <span className="product-howto__frequency">Una vez al día.</span>
+              </p>
             </div>
 
             <div className="product-purchase">
               <div className="product-price">
-                <span>Precio por unidad</span>
-                <strong>$69.900 <small>COP</small></strong>
+                <span>Total</span>
+                <strong>${formatPrice(totalPrice)} <small>COP</small></strong>
+                <span className="product-price__tax">IVA incluido</span>
               </div>
               <div className="quantity-control" aria-label="Seleccionar cantidad">
                 <button type="button" onClick={() => setQuantity((current) => Math.max(1, current - 1))} aria-label="Reducir cantidad">−</button>
@@ -108,7 +133,7 @@ const ColagenoDetailPage = () => {
               Agregar y continuar <span aria-hidden="true">↗</span>
             </button>
             <p className="product-buybox__note">
-              Finalizas tu pedido y pago por WhatsApp · Envíos a toda Colombia
+              Compra segura · Envíos a toda Colombia
             </p>
           </div>
         </div>

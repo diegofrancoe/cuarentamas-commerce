@@ -1,12 +1,13 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import SiteHeader from "./SiteHeader.jsx";
+import BrandLogo from "./BrandLogo.jsx";
 import productBack from "../assets/product_detail_figma_back_trimmed.png";
 import heroProduct from "../assets/editorial/hero-producto-final.png";
-import heroPodium from "../assets/editorial/hero-fondo.png";
-import ritualImage from "../assets/editorial/ritual-manana-40plus.jpg";
-import greenTable from "../assets/editorial/mesa-verde.jpg";
-import routineImage from "../assets/editorial/cafe-manana.jpg";
+import heroPodium from "../assets/editorial/hero-fondo-naranja.png";
+import coffeeRecipeImage from "../assets/editorial/receta-cafe-manana.webp";
+import smoothieRecipeImage from "../assets/editorial/receta-smoothie-citrico.webp";
+import infusionRecipeImage from "../assets/editorial/receta-agua-infusion.webp";
 
 const benefits = [
   "9,2 g de proteína por porción",
@@ -21,22 +22,22 @@ const recipes = [
     number: "01",
     title: "Café de la mañana",
     copy: "Añade 10 g a tu café y mezcla hasta integrar. Sin cambiar el sabor de tu ritual.",
-    image: routineImage,
+    image: coffeeRecipeImage,
     position: "center",
   },
   {
     number: "02",
     title: "Smoothie cítrico",
     copy: "Combínalo con mango, naranja, hielo y tu bebida favorita.",
-    image: ritualImage,
-    position: "68% center",
+    image: smoothieRecipeImage,
+    position: "center",
   },
   {
     number: "03",
     title: "Agua o infusión",
     copy: "Una porción en agua, té o aromática. Simple, práctico y todos los días.",
-    image: greenTable,
-    position: "16% center",
+    image: infusionRecipeImage,
+    position: "center",
   },
 ];
 
@@ -125,6 +126,14 @@ const LandingPage = () => {
                   aria-hidden="true"
                 />
               </div>
+              <img
+                src={heroPodium}
+                alt=""
+                width="1003"
+                height="1568"
+                className="product-campaign__podium-front"
+                aria-hidden="true"
+              />
             </div>
             <div className="product-campaign__facts" aria-label="Información principal del producto">
               <span><strong>200 g</strong><small>Contenido neto</small></span>
@@ -196,13 +205,13 @@ const LandingPage = () => {
           </button>
         </div>
         <div className="landing-footer__bottom">
-          <div className="brand-mark brand-mark--footer"><span>40</span><sup>+</sup></div>
+          <BrandLogo className="brand-mark--footer" />
           <p>Colágeno hidrolizado hecho en Colombia.</p>
           <div className="footer-links">
             <a href="https://www.instagram.com/cuarentamas_official/" target="_blank" rel="noreferrer">Instagram</a>
-            <a href="https://wa.me/573209099105" target="_blank" rel="noreferrer">WhatsApp</a>
+            <a href="https://wa.me/573209099105" target="_blank" rel="noreferrer">Contacto</a>
           </div>
-          <span>© {new Date().getFullYear()} Cuarenta Más</span>
+          <span>© 2026 Cuarentamas</span>
         </div>
       </footer>
     </main>

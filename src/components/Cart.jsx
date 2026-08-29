@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext.jsx";
+import BrandLogo from "./BrandLogo.jsx";
 import productImage from "../assets/product_detail_figma_front_trimmed.png";
 import productBack from "../assets/product_detail_figma_back_trimmed.png";
 import iconVisa from "../assets/icon_visa.png";
@@ -47,6 +48,9 @@ const Cart = () => {
 
   const shippingCost = SHIPPING_RATES[customer.shippingZone];
   const orderTotal = cartTotal + shippingCost;
+  const deliveryComplete = cartItems.length > 0
+    && [customer.firstName, customer.phone, customer.city, customer.address]
+      .every((value) => value.trim());
 
   const updateCustomer = (event) => {
     const { name, value } = event.target;
@@ -94,11 +98,11 @@ const Cart = () => {
     <div className="cart-overlay" role="dialog" aria-modal="true" aria-label="Finalizar pedido">
       <section className="cart-hero">
         <div className="cart-hero__header">
-          <div className="brand-mark brand-mark--small"><span>40</span><sup>+</sup></div>
+          <BrandLogo className="brand-mark--small" variant="green" />
           <div className="cart-steps" aria-label="Proceso de compra">
-            <span className="is-active">1 · Carrito</span>
+            <span className={deliveryComplete ? "is-complete" : "is-active"}>1 · Carrito</span>
             <i />
-            <span>2 · WhatsApp</span>
+            <span className={deliveryComplete ? "is-active" : ""}>2 · Datos</span>
             <i />
             <span>3 · Pago</span>
           </div>
@@ -109,7 +113,7 @@ const Cart = () => {
           <div className="cart-empty">
             <span className="eyebrow">Tu carrito está esperando</span>
             <h2>Empieza con un hábito simple.</h2>
-            <p>Agrega tu Colágeno Hidrolizado 40+ y finaliza el pedido por WhatsApp.</p>
+            <p>Agrega tu Colágeno Hidrolizado 40+ para continuar con tu compra.</p>
             <button type="button" className="button button--orange" onClick={continueShopping}>Ver producto <span>→</span></button>
           </div>
         ) : (
@@ -131,6 +135,7 @@ const Cart = () => {
                       <h3>{item.name}</h3>
                       <p>200 g · 20 porciones aprox.</p>
                       <strong>{formatCurrency(item.price)}</strong>
+                      <small className="cart-line__tax">IVA incluido</small>
                       <div className="cart-line__actions">
                         <div className="quantity-control quantity-control--light">
                           <button type="button" onClick={() => updateQuantity(item.id, Math.max(1, item.quantity - 1))}>−</button>
@@ -154,11 +159,11 @@ const Cart = () => {
             <div className="checkout-form-wrap">
               <span className="eyebrow">Datos de entrega</span>
               <h2>¿A dónde enviamos tu 40+?</h2>
-              <p className="checkout-form-wrap__intro">Completa tus datos. En WhatsApp confirmamos disponibilidad, pago y envío.</p>
+              <p className="checkout-form-wrap__intro">Completa tus datos para coordinar disponibilidad, pago y envío.</p>
 
               <div className="checkout-form">
                 <Field label="Nombre" name="firstName" value={customer.firstName} onChange={updateCustomer} error={errors.firstName} placeholder="Tu nombre" />
-                <Field label="WhatsApp" name="phone" value={customer.phone} onChange={updateCustomer} error={errors.phone} placeholder="300 000 0000" type="tel" />
+                <Field label="Teléfono" name="phone" value={customer.phone} onChange={updateCustomer} error={errors.phone} placeholder="300 000 0000" type="tel" />
                 <Field label="Ciudad" name="city" value={customer.city} onChange={updateCustomer} error={errors.city} placeholder="Bogotá" />
                 <Field label="Dirección" name="address" value={customer.address} onChange={updateCustomer} error={errors.address} placeholder="Calle, número y detalles" className="checkout-field--wide" />
                 <label className="checkout-field checkout-field--wide">
@@ -171,9 +176,9 @@ const Cart = () => {
               </div>
 
               <button type="button" className="button button--whatsapp checkout-button" onClick={handleCheckout}>
-                <WhatsAppIcon /> Continuar en WhatsApp <span aria-hidden="true">↗</span>
+                Finalizar pedido <span aria-hidden="true">↗</span>
               </button>
-              <p className="checkout-privacy">No realizamos cobros en esta página. Tu pedido se confirma directamente con nuestro equipo.</p>
+              <p className="checkout-privacy">Tus datos se usan únicamente para gestionar y entregar tu pedido.</p>
               <div className="checkout-payments" aria-label="Medios de pago disponibles">
                 <span>Medios de pago disponibles</span>
                 <div>
@@ -198,12 +203,6 @@ const Field = ({ label, error, className = "", ...props }) => (
     <input {...props} />
     {error && <small>Este dato es necesario</small>}
   </label>
-);
-
-const WhatsAppIcon = () => (
-  <svg viewBox="0 0 32 32" aria-hidden="true">
-    <path fill="currentColor" d="M16 4a11.7 11.7 0 0 0-10 17.8L4.4 28l6.4-1.7A11.8 11.8 0 1 0 16 4Zm0 21.4c-1.7 0-3.4-.5-4.8-1.3l-.4-.2-3.8 1 1-3.7-.2-.4A9.6 9.6 0 1 1 16 25.4Zm5.3-7.2c-.3-.1-1.7-.8-2-.9-.2-.1-.4-.1-.6.2-.2.3-.7.9-.9 1.1-.2.2-.3.2-.6.1-1.8-.9-3-1.6-4.2-3.7-.3-.5.3-.5.9-1.6.1-.2 0-.4 0-.6l-.9-2.1c-.2-.5-.5-.4-.7-.4h-.6c-.2 0-.6.1-.9.4-.3.3-1.2 1.2-1.2 2.9s1.2 3.3 1.4 3.6c.2.2 2.5 3.8 6 5.3 2.2.9 3.1 1 4.2.8.7-.1 2-.8 2.3-1.6.3-.8.3-1.5.2-1.6-.1-.2-.4-.3-.7-.4Z" />
-  </svg>
 );
 
 export default Cart;

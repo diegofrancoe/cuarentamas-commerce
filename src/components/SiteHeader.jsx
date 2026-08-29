@@ -1,10 +1,9 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useCart } from "../context/CartContext.jsx";
+import BrandLogo from "./BrandLogo.jsx";
 
-const SiteHeader = ({ light = false }) => {
+const SiteHeader = ({ light = false, logoVariant = "cream" }) => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { cartCount, openCart } = useCart();
 
   const goToRecipes = () => {
     if (location.pathname !== "/") {
@@ -17,9 +16,7 @@ const SiteHeader = ({ light = false }) => {
 
   return (
     <header className={`site-header ${light ? "site-header--light" : ""}`}>
-      <Link to="/" className="brand-mark" aria-label="Cuarenta Más, ir al inicio">
-        <span>40</span><sup>+</sup>
-      </Link>
+      <BrandLogo to="/" variant={logoVariant} />
 
       <nav className="site-nav" aria-label="Navegación principal">
         <Link to="/">Inicio</Link>
@@ -27,10 +24,6 @@ const SiteHeader = ({ light = false }) => {
         <button type="button" onClick={goToRecipes}>Cómo tomarlo</button>
       </nav>
 
-      <button type="button" className="cart-pill" onClick={openCart} aria-label={`Abrir carrito, ${cartCount} productos`}>
-        <span>Carrito</span>
-        <span className="cart-pill__count">{cartCount}</span>
-      </button>
     </header>
   );
 };
