@@ -29,12 +29,14 @@ body {
 
 button,
 input,
-select { font: inherit; }
+select,
+textarea { font: inherit; }
 
 button:focus-visible,
 a:focus-visible,
 input:focus-visible,
-select:focus-visible {
+select:focus-visible,
+textarea:focus-visible {
   outline: 3px solid rgba(235, 99, 47, 0.42);
   outline-offset: 3px;
 }

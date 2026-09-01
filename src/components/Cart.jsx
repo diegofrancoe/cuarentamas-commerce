@@ -1,23 +1,11 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext.jsx";
 import BrandLogo from "./BrandLogo.jsx";
 import productImage from "../assets/product_detail_figma_front_trimmed.png";
-import productBack from "../assets/product_detail_figma_back_trimmed.png";
-import iconVisa from "../assets/icon_visa.png";
-import iconMastercard from "../assets/icon_mastercard.png";
-import iconAmerican from "../assets/icon_american.png";
-import iconBold from "../assets/icon_bold.png";
 
 const WHATSAPP_NUMBER = "573209099105";
 const SHIPPING_RATES = { bogota: 6000, colombia: 16000 };
-const PAYMENT_METHODS = [
-  { src: iconVisa, alt: "Visa" },
-  { src: iconMastercard, alt: "Mastercard" },
-  { src: iconAmerican, alt: "American Express" },
-  { src: iconBold, alt: "Bold" },
-];
-
 const formatCurrency = (value) =>
   value.toLocaleString("es-CO", {
     style: "currency",
@@ -27,6 +15,9 @@ const formatCurrency = (value) =>
 
 const Cart = () => {
   const navigate = useNavigate();
+  const dialogRef = useRef(null);
+  const closeButtonRef = useRef(null);
+  const previousFocusRef = useRef(null);
   const { cartItems, cartTotal, isCartOpen, closeCart, updateQuantity, removeFromCart } = useCart();
   const [errors, setErrors] = useState({});
   const [customer, setCustomer] = useState({
@@ -35,26 +26,56 @@ const Cart = () => {
     city: "",
     address: "",
     shippingZone: "bogota",
+    acceptedTerms: false,
   });
 
   useEffect(() => {
     if (!isCartOpen) return undefined;
+    previousFocusRef.current = document.activeElement;
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
-    return () => { document.body.style.overflow = previousOverflow; };
-  }, [isCartOpen]);
+    closeButtonRef.current?.focus();
+
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        closeCart();
+        return;
+      }
+
+      if (event.key !== "Tab") return;
+      const focusable = dialogRef.current?.querySelectorAll(
+        'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])',
+      );
+      if (!focusable?.length) return;
+
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      document.removeEventListener("keydown", handleKeyDown);
+      previousFocusRef.current?.focus?.();
+    };
+  }, [closeCart, isCartOpen]);
 
   if (!isCartOpen) return null;
 
   const shippingCost = SHIPPING_RATES[customer.shippingZone];
   const orderTotal = cartTotal + shippingCost;
-  const deliveryComplete = cartItems.length > 0
-    && [customer.firstName, customer.phone, customer.city, customer.address]
-      .every((value) => value.trim());
 
   const updateCustomer = (event) => {
-    const { name, value } = event.target;
-    setCustomer((current) => ({ ...current, [name]: value }));
+    const { checked, name, type, value } = event.target;
+    setCustomer((current) => ({ ...current, [name]: type === "checkbox" ? checked : value }));
     setErrors((current) => ({ ...current, [name]: false }));
   };
 
@@ -66,11 +87,12 @@ const Cart = () => {
   const handleCheckout = () => {
     const required = ["firstName", "phone", "city", "address"];
     const nextErrors = Object.fromEntries(required.map((field) => [field, !customer[field].trim()]));
+    nextErrors.acceptedTerms = !customer.acceptedTerms;
     setErrors(nextErrors);
 
     if (!cartItems.length || Object.values(nextErrors).some(Boolean)) return;
 
-    const shippingLabel = customer.shippingZone === "bogota" ? "Bogotá y cercanías" : "Resto de Colombia";
+    const shippingLabel = customer.shippingZone === "bogota" ? "Bogotá" : "Resto de Colombia";
     const lines = cartItems.flatMap((item) => [
       `• ${item.name}`,
       `  Cantidad: ${item.quantity}`,
@@ -89,47 +111,40 @@ const Cart = () => {
       `Teléfono: ${customer.phone}`,
       `Ciudad: ${customer.city}`,
       `Dirección: ${customer.address}`,
+      "",
+      "Al despachar, por favor envíenme por WhatsApp la guía, la transportadora y el tiempo estimado de llegada.",
     ].join("\n");
 
     window.location.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
   };
 
   return (
-    <div className="cart-overlay" role="dialog" aria-modal="true" aria-label="Finalizar pedido">
+    <div ref={dialogRef} className="cart-overlay" role="dialog" aria-modal="true" aria-label="Finalizar pedido">
       <section className="cart-hero">
         <div className="cart-hero__header">
           <BrandLogo className="brand-mark--small" variant="green" />
-          <div className="cart-steps" aria-label="Proceso de compra">
-            <span className={deliveryComplete ? "is-complete" : "is-active"}>1 · Carrito</span>
-            <i />
-            <span className={deliveryComplete ? "is-active" : ""}>2 · Datos</span>
-            <i />
-            <span>3 · Pago</span>
-          </div>
-          <button type="button" className="cart-close" onClick={closeCart} aria-label="Cerrar carrito">×</button>
+          <button ref={closeButtonRef} type="button" className="cart-close" onClick={closeCart} aria-label="Cerrar carrito">×</button>
         </div>
 
         {!cartItems.length ? (
           <div className="cart-empty">
-            <span className="eyebrow">Tu carrito está esperando</span>
+            <span className="eyebrow">Tu momento también cuenta</span>
             <h2>Empieza con un hábito simple.</h2>
-            <p>Agrega tu Colágeno Hidrolizado 40+ para continuar con tu compra.</p>
+            <p>Agrega tu Colágeno Hidrolizado 40+ y da el primer paso para volver a ti.</p>
             <button type="button" className="button button--orange" onClick={continueShopping}>Ver producto <span>→</span></button>
           </div>
         ) : (
           <div className="cart-hero__grid">
             <div className="cart-summary">
-              <span className="eyebrow eyebrow--light">Tu pedido</span>
-              <h2>Ya casi es tuyo.</h2>
+              <span className="eyebrow eyebrow--light">Tu ritual 40+</span>
+              <h2>Ya casi empieza tu momento.</h2>
 
               <div className="cart-items">
                 {cartItems.map((item) => (
                   <article className="cart-line" key={item.id}>
                     <div className="cart-line__image">
                       <span />
-                      <img src={productBack} alt="" aria-hidden="true" className="cart-line__pack cart-line__pack--back" />
                       <img src={item.image || productImage} alt={item.name} className="cart-line__pack cart-line__pack--front" />
-                      <small>Frente + información</small>
                     </div>
                     <div className="cart-line__info">
                       <h3>{item.name}</h3>
@@ -159,7 +174,11 @@ const Cart = () => {
             <div className="checkout-form-wrap">
               <span className="eyebrow">Datos de entrega</span>
               <h2>¿A dónde enviamos tu 40+?</h2>
-              <p className="checkout-form-wrap__intro">Completa tus datos para coordinar disponibilidad, pago y envío.</p>
+              <p className="checkout-form-wrap__intro">
+                Completa tus datos y continúa por WhatsApp. El envío cuesta $6.000 en
+                Bogotá y $16.000 para el resto del país. Al despachar te enviaremos la
+                guía, la transportadora y el tiempo estimado de llegada.
+              </p>
 
               <div className="checkout-form">
                 <Field label="Nombre" name="firstName" value={customer.firstName} onChange={updateCustomer} error={errors.firstName} placeholder="Tu nombre" />
@@ -169,26 +188,33 @@ const Cart = () => {
                 <label className="checkout-field checkout-field--wide">
                   <span>Zona de envío</span>
                   <select name="shippingZone" value={customer.shippingZone} onChange={updateCustomer}>
-                    <option value="bogota">Bogotá y cercanías · $6.000</option>
-                    <option value="colombia">Resto de Colombia · $16.000</option>
+                    <option value="bogota">Bogotá · $6.000</option>
+                    <option value="colombia">Resto del país · $16.000</option>
                   </select>
                 </label>
               </div>
 
+              <label className={`checkout-terms ${errors.acceptedTerms ? "has-error" : ""}`}>
+                <input
+                  type="checkbox"
+                  name="acceptedTerms"
+                  checked={customer.acceptedTerms}
+                  onChange={updateCustomer}
+                />
+                <span>
+                  Acepto los <Link to="/terminos-y-condiciones" onClick={closeCart}>términos y condiciones</Link>
+                  {" "}y autorizo el uso de mis datos para gestionar el pedido según la{" "}
+                  <Link to="/politica-de-datos" onClick={closeCart}>política de datos</Link>.
+                </span>
+              </label>
+              {errors.acceptedTerms && <small className="checkout-terms__error">Debes aceptar para continuar.</small>}
+
               <button type="button" className="button button--whatsapp checkout-button" onClick={handleCheckout}>
-                Finalizar pedido <span aria-hidden="true">↗</span>
+                Continuar pedido por WhatsApp <span aria-hidden="true">↗</span>
               </button>
-              <p className="checkout-privacy">Tus datos se usan únicamente para gestionar y entregar tu pedido.</p>
-              <div className="checkout-payments" aria-label="Medios de pago disponibles">
-                <span>Medios de pago disponibles</span>
-                <div>
-                  {PAYMENT_METHODS.map((method) => (
-                    <span className="checkout-payment" key={method.alt}>
-                      <img src={method.src} alt={method.alt} />
-                    </span>
-                  ))}
-                </div>
-              </div>
+              <p className="checkout-privacy">
+                Esta acción abre WhatsApp con el resumen listo para enviar. Aún no realiza ningún cobro.
+              </p>
             </div>
           </div>
         )}

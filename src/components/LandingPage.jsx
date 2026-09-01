@@ -1,5 +1,5 @@
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import SiteHeader from "./SiteHeader.jsx";
 import BrandLogo from "./BrandLogo.jsx";
 import productBack from "../assets/product_detail_figma_back_trimmed.png";
@@ -8,9 +8,11 @@ import heroPodium from "../assets/editorial/hero-fondo-naranja.png";
 import coffeeRecipeImage from "../assets/editorial/receta-cafe-manana.webp";
 import smoothieRecipeImage from "../assets/editorial/receta-smoothie-citrico.webp";
 import infusionRecipeImage from "../assets/editorial/receta-agua-infusion.webp";
+import ritualCover from "../assets/editorial/ritual-40-cover.jpg";
+import { businessInfo } from "../config/businessInfo.js";
 
 const benefits = [
-  "9,2 g de proteína por porción",
+  "100% puro",
   "Sin azúcares añadidos",
   "Sabor neutro",
   "20 porciones",
@@ -21,28 +23,75 @@ const recipes = [
   {
     number: "01",
     title: "Café de la mañana",
-    copy: "Añade 10 g a tu café y mezcla hasta integrar. Sin cambiar el sabor de tu ritual.",
+    copy: "Una forma simple de empezar tu mañana.",
     image: coffeeRecipeImage,
-    position: "center",
+    ingredients: [
+      "1 taza de café caliente",
+      "1 scoop de 40+",
+      "100 mL de leche o bebida vegetal",
+      "Canela opcional",
+    ],
+    preparation: [
+      "Prepara el café caliente.",
+      "Agrega 1 scoop de 40+.",
+      "Incorpora la leche o bebida vegetal.",
+      "Mezcla bien y, si quieres, añade canela.",
+    ],
   },
   {
     number: "02",
     title: "Smoothie cítrico",
-    copy: "Combínalo con mango, naranja, hielo y tu bebida favorita.",
+    copy: "Una mezcla vibrante para variar tu rutina.",
     image: smoothieRecipeImage,
-    position: "center",
+    ingredients: [
+      "1/2 taza de mango",
+      "1/2 taza de jugo de naranja natural",
+      "1 scoop de 40+",
+      "100 mL de agua",
+      "Hielo al gusto",
+    ],
+    preparation: [
+      "Licúa el mango, el jugo de naranja, el agua y el 40+.",
+      "Agrega hielo al gusto.",
+      "Sirve y disfruta.",
+    ],
   },
   {
     number: "03",
     title: "Agua o infusión",
-    copy: "Una porción en agua, té o aromática. Simple, práctico y todos los días.",
+    copy: "Una opción fresca, ligera y muy simple.",
     image: infusionRecipeImage,
-    position: "center",
+    ingredients: [
+      "1 scoop de 40+",
+      "250 mL de agua fría",
+      "Jugo de 1/2 limón",
+      "Rodajas de limón",
+      "Hielo al gusto",
+    ],
+    preparation: [
+      "Sirve el agua fría en un vaso.",
+      "Agrega el 40+ y mezcla bien.",
+      "Añade el jugo de limón y el hielo.",
+      "Decora con rodajas de limón.",
+    ],
   },
 ];
 
 const LandingPage = () => {
   const navigate = useNavigate();
+  const [activeRecipe, setActiveRecipe] = useState(null);
+  const recipeCloseRef = useRef(null);
+  const recipeTriggerRef = useRef(null);
+
+  const closeRecipe = useCallback(() => {
+    setActiveRecipe(null);
+    window.requestAnimationFrame(() => recipeTriggerRef.current?.focus());
+  }, []);
+
+  const openRecipe = (recipe, event) => {
+    recipeTriggerRef.current = event.currentTarget;
+    setActiveRecipe(recipe);
+  };
 
   useEffect(() => {
     const elements = document.querySelectorAll("[data-reveal]");
@@ -62,7 +111,23 @@ const LandingPage = () => {
     return () => observer.disconnect();
   }, []);
 
+  useEffect(() => {
+    if (!activeRecipe) return undefined;
+
+    recipeCloseRef.current?.focus();
+
+    const closeOnEscape = (event) => {
+      if (event.key === "Escape") closeRecipe();
+    };
+    window.addEventListener("keydown", closeOnEscape);
+
+    return () => {
+      window.removeEventListener("keydown", closeOnEscape);
+    };
+  }, [activeRecipe, closeRecipe]);
+
   const goToProduct = () => navigate("/producto/colageno-hidrolizado-40");
+  const goToExperience = () => navigate("/comparte-tu-experiencia");
 
   return (
     <main className="landing-page">
@@ -71,27 +136,27 @@ const LandingPage = () => {
 
         <div className="landing-hero__grid">
           <div className="landing-hero__copy">
-            <span className="eyebrow">Colágeno hidrolizado · 200 g</span>
-            <h1>Tu ritual diario,<br /><em>más simple.</em></h1>
+            <span className="eyebrow">Bienestar diario para tu rutina</span>
+            <h1>Volver a ti puede empezar<br /><em>con algo simple.</em></h1>
             <p>
-              Péptidos de colágeno tipo I y III, de sabor neutro y fáciles de
-              integrar en lo que ya disfrutas cada mañana.
+              Colágeno hidrolizado 40+ para acompañar tu bienestar diario con un
+              hábito fácil de integrar a tus días.
             </p>
             <div className="hero-actions">
               <button type="button" className="button button--orange" onClick={goToProduct}>
-                Comprar 40+ <span aria-hidden="true">↗</span>
+                Empezar mi ritual <span aria-hidden="true">↗</span>
               </button>
               <button
                 type="button"
                 className="text-link"
                 onClick={() => document.querySelector("#formas-de-usarlo")?.scrollIntoView({ behavior: "smooth" })}
               >
-                Ver cómo tomarlo <span aria-hidden="true">↓</span>
+                Descubrir cómo tomarlo <span aria-hidden="true">↓</span>
               </button>
             </div>
             <div className="hero-proof">
               <span className="hero-proof__dot" />
-              <span>Fórmula simple · sin gluten · sin azúcar</span>
+              <span>Sabor neutro · fácil de mezclar · una vez al día</span>
             </div>
           </div>
 
@@ -146,10 +211,10 @@ const LandingPage = () => {
 
       <section className="landing-middle" id="formas-de-usarlo">
         <div className="section-intro reveal" data-reveal>
-          <span className="eyebrow">Cómo hacerlo tuyo</span>
-          <h2>Una cucharada.<br />Muchas formas de disfrutarla.</h2>
+          <span className="eyebrow">Un hábito que sí cabe en tu día</span>
+          <h2>Una porción.<br />Muchas formas de disfrutarlo.</h2>
           <p>
-            No necesitas cambiar tu rutina. Solo elegir el momento que mejor te funciona.
+            Déjalo visible, mézclalo con algo que ya disfrutas y encuentra el momento que mejor funciona para ti.
           </p>
         </div>
 
@@ -157,12 +222,25 @@ const LandingPage = () => {
           {recipes.map((recipe, index) => (
             <article className={`recipe-card reveal reveal--delay-${index + 1}`} data-reveal key={recipe.title}>
               <div className="recipe-card__image-wrap">
-                <img src={recipe.image} alt="" style={{ objectPosition: recipe.position }} />
+                <img
+                  src={recipe.image}
+                  alt={`Preparación: ${recipe.title}`}
+                  loading="lazy"
+                  decoding="async"
+                />
                 <span className="recipe-card__number">{recipe.number}</span>
               </div>
               <div className="recipe-card__body">
                 <h3>{recipe.title}</h3>
                 <p>{recipe.copy}</p>
+                <button
+                  type="button"
+                  className="recipe-card__cta"
+                  onClick={(event) => openRecipe(recipe, event)}
+                  aria-label={`Ver receta: ${recipe.title}`}
+                >
+                  Ver receta <i aria-hidden="true">→</i>
+                </button>
               </div>
             </article>
           ))}
@@ -178,42 +256,132 @@ const LandingPage = () => {
 
         <div className="why-panel reveal" data-reveal>
           <div className="why-panel__copy">
-            <span className="eyebrow eyebrow--light">Lo esencial, bien hecho</span>
-            <h2>Solo lo que necesitas para volverlo parte de tu día.</h2>
+            <span className="eyebrow eyebrow--light">Cuidarte también es honrar tu vida</span>
+            <h2>Dale a tu cuerpo una forma simple de seguir acompañándote.</h2>
             <div className="why-list">
               <span><b>01</b> Colágeno bovino tipo I y III</span>
-              <span><b>02</b> 9,2 g de proteína por porción</span>
+              <span><b>02</b> 100% puro</span>
               <span><b>03</b> Sin grasa, azúcar ni maltodextrina</span>
             </div>
             <button type="button" className="button button--cream" onClick={goToProduct}>
-              Conocer el producto <span aria-hidden="true">→</span>
+              Conocer mi 40+ <span aria-hidden="true">→</span>
             </button>
           </div>
           <div className="why-panel__product">
             <span className="why-panel__orange-shape" />
-            <img src={productBack} alt="Información nutricional del Colágeno Hidrolizado 40+" />
+            <img
+              src={productBack}
+              alt="Información nutricional del Colágeno Hidrolizado 40+"
+              loading="lazy"
+              decoding="async"
+            />
           </div>
         </div>
       </section>
 
       <footer className="landing-footer">
         <div className="landing-footer__cta">
-          <span className="eyebrow eyebrow--light">Tu bienestar empieza en lo cotidiano</span>
-          <h2>Haz espacio para un hábito que sí cabe en tu día.</h2>
-          <button type="button" className="button button--orange" onClick={goToProduct}>
-            Quiero mi 40+ <span aria-hidden="true">↗</span>
+          <button
+            type="button"
+            className="landing-ritual"
+            onClick={goToExperience}
+            aria-label="Conocer el e-book Ritual 40+ y compartir mi experiencia"
+          >
+            <span className="landing-ritual__badge">E-book de regalo</span>
+            <img
+              src={ritualCover}
+              alt="Portada del e-book Ritual 40+"
+              loading="lazy"
+              decoding="async"
+            />
+            <span className="landing-ritual__note">
+              <strong>Un detalle para agradecerte</strong>
+              <span>Recíbelo al compartir tu historia</span>
+            </span>
           </button>
+          <div className="landing-footer__cta-copy">
+            <span className="eyebrow eyebrow--light">Tu experiencia también cuenta</span>
+            <h2>Comparte tu historia y recibe el e-book Ritual 40+.</h2>
+            <p>
+              Una guía para volver a ti, con un recetario digital, un mini planner
+              y formas simples de disfrutar tu 40+.
+            </p>
+            <button type="button" className="button button--orange" onClick={goToExperience}>
+              Compartir y recibir mi e-book <span aria-hidden="true">↗</span>
+            </button>
+          </div>
         </div>
         <div className="landing-footer__bottom">
           <BrandLogo className="brand-mark--footer" />
-          <p>Colágeno hidrolizado hecho en Colombia.</p>
-          <div className="footer-links">
-            <a href="https://www.instagram.com/cuarentamas_official/" target="_blank" rel="noreferrer">Instagram</a>
-            <a href="https://wa.me/573209099105" target="_blank" rel="noreferrer">Contacto</a>
+          <div className="landing-footer__identity">
+            <p>Colágeno hidrolizado creado para acompañar tu bienestar, todos los días.</p>
+            <span>© 2026 Cuarentamas</span>
           </div>
-          <span>© 2026 Cuarentamas</span>
+          <nav className="footer-contact" aria-label="Contacto directo">
+            <span className="footer-group-label">Hablemos</span>
+            <div>
+              <a href={`https://wa.me/${businessInfo.whatsapp}`} target="_blank" rel="noreferrer">
+                WhatsApp
+              </a>
+              <a href={`mailto:${businessInfo.email}`}>Correo</a>
+              <a href="https://www.instagram.com/cuarentamas_official/" target="_blank" rel="noreferrer">
+                Instagram
+              </a>
+            </div>
+          </nav>
+          <nav className="footer-links" aria-label="Información del sitio">
+            <span className="footer-group-label">Información</span>
+            <div>
+              <Link to="/envios-cambios-y-devoluciones">Envíos</Link>
+              <Link to="/politica-de-datos">Datos</Link>
+              <Link to="/terminos-y-condiciones">Términos</Link>
+            </div>
+          </nav>
         </div>
       </footer>
+
+      {activeRecipe && (
+        <div className="recipe-modal" role="presentation">
+          <section
+            className="recipe-modal__dialog"
+            role="dialog"
+            aria-labelledby="recipe-modal-title"
+          >
+            <button
+              type="button"
+              ref={recipeCloseRef}
+              className="recipe-modal__close"
+              onClick={closeRecipe}
+              aria-label="Cerrar receta"
+            >
+              ×
+            </button>
+            <div className="recipe-modal__heading">
+              <span className="eyebrow">Del e-book Ritual 40+</span>
+              <h2 id="recipe-modal-title">{activeRecipe.title}</h2>
+              <p>{activeRecipe.copy}</p>
+            </div>
+            <div className="recipe-modal__content">
+              <div>
+                <h3>Ingredientes</h3>
+                <ul>
+                  {activeRecipe.ingredients.map((ingredient) => (
+                    <li key={ingredient}>{ingredient}</li>
+                  ))}
+                </ul>
+              </div>
+              <div>
+                <h3>Preparación</h3>
+                <ol>
+                  {activeRecipe.preparation.map((step) => (
+                    <li key={step}>{step}</li>
+                  ))}
+                </ol>
+              </div>
+            </div>
+          </section>
+        </div>
+      )}
     </main>
   );
 };

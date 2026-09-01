@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import socialImage from "../assets/editorial/ritual-manana-40plus.jpg";
 
 const DEFAULT_META = {
   title: "40+",
@@ -16,12 +17,17 @@ const META_BY_PATH = {
   "/productos": {
     title: "Productos 40+ | Suplementos para bienestar después de los 40",
     description:
-      "Explora los productos 40+ diseñados para energía, articulaciones, piel y bienestar diario con fórmulas transparentes y responsables.",
+      "Explora 40+, una propuesta de bienestar diario con fórmulas transparentes, responsables y fáciles de integrar a tu rutina.",
   },
   "/producto/colageno-hidrolizado-40": {
     title: "Colágeno Hidrolizado 40+ | Péptidos tipo I y III en Colombia",
     description:
-      "Colágeno Hidrolizado 40+ con fórmula limpia, sin azúcares añadidos y enfoque en articulaciones, piel y bienestar diario después de los 40.",
+      "Colágeno Hidrolizado 40+ con fórmula limpia, sin azúcares añadidos y fácil de integrar a una rutina de bienestar diario.",
+  },
+  "/comparte-tu-experiencia": {
+    title: "Comparte tu experiencia con 40+ | Recibe el e-book Ritual 40+",
+    description:
+      "Cuéntanos cómo 40+ hace parte de tu rutina y recibe en tu correo el e-book Ritual 40+.",
   },
   "/sobre-nosotros": {
     title: "Sobre 40+ | Ciencia, transparencia y bienestar consciente",
@@ -42,6 +48,11 @@ const META_BY_PATH = {
     title: "Política de Datos | 40+",
     description:
       "Revisa la política de tratamiento de datos personales de 40+.",
+  },
+  "/envios-cambios-y-devoluciones": {
+    title: "Envíos, cambios y devoluciones | 40+",
+    description:
+      "Consulta la cobertura, costos de envío y proceso de cambios, devoluciones y garantías de 40+.",
   },
 };
 
@@ -71,6 +82,7 @@ const SeoHead = () => {
     const meta = META_BY_PATH[location.pathname] || DEFAULT_META;
     const baseUrl = window.location.origin;
     const canonical = `${baseUrl}${location.pathname}`;
+    const shareImage = new URL(socialImage, baseUrl).href;
 
     document.title = meta.title;
 
@@ -102,6 +114,14 @@ const SeoHead = () => {
       el.setAttribute("property", "og:site_name");
       el.setAttribute("content", "40+");
     });
+    upsertMeta('meta[property="og:image"]', (el) => {
+      el.setAttribute("property", "og:image");
+      el.setAttribute("content", shareImage);
+    });
+    upsertMeta('meta[property="og:image:alt"]', (el) => {
+      el.setAttribute("property", "og:image:alt");
+      el.setAttribute("content", "Ritual diario de bienestar con 40+");
+    });
     upsertMeta('meta[name="twitter:card"]', (el) => {
       el.setAttribute("name", "twitter:card");
       el.setAttribute("content", "summary_large_image");
@@ -113,6 +133,10 @@ const SeoHead = () => {
     upsertMeta('meta[name="twitter:description"]', (el) => {
       el.setAttribute("name", "twitter:description");
       el.setAttribute("content", meta.description);
+    });
+    upsertMeta('meta[name="twitter:image"]', (el) => {
+      el.setAttribute("name", "twitter:image");
+      el.setAttribute("content", shareImage);
     });
     upsertCanonical(canonical);
 

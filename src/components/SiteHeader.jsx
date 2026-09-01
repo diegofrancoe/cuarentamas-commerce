@@ -1,7 +1,7 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import BrandLogo from "./BrandLogo.jsx";
 
-const SiteHeader = ({ light = false, logoVariant = "cream" }) => {
+const SiteHeader = ({ light = false }) => {
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -16,7 +16,7 @@ const SiteHeader = ({ light = false, logoVariant = "cream" }) => {
 
   return (
     <header className={`site-header ${light ? "site-header--light" : ""}`}>
-      <BrandLogo to="/" variant={logoVariant} />
+      <BrandLogo to="/" variant={light ? "cream" : "green"} />
 
       <nav className="site-nav" aria-label="Navegación principal">
         <Link to="/">Inicio</Link>

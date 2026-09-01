@@ -1,63 +1,130 @@
 // src/components/CookieBanner.jsx
-import React, { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import {
+  COOKIE_CONSENT_EVENT,
+  COOKIE_CONSENT_KEY,
+} from "../lib/metaPixel.js";
 
-const COOKIE_KEY = "cm_cookies_choice"; // para recordar la decisión
+const saveChoice = (choice) => {
+  try {
+    localStorage.setItem(COOKIE_CONSENT_KEY, choice);
+  } catch {
+    // La elección sigue aplicándose durante esta visita aunque el navegador bloquee el almacenamiento.
+  }
+  window.dispatchEvent(new CustomEvent(COOKIE_CONSENT_EVENT, { detail: choice }));
+};
 
 const CookieBanner = () => {
+  const dialogRef = useRef(null);
   const [visible, setVisible] = useState(() => {
     if (typeof window === "undefined") return false;
-    const stored = localStorage.getItem(COOKIE_KEY);
-    return !stored;
+    try {
+      return !localStorage.getItem(COOKIE_CONSENT_KEY);
+    } catch {
+      return true;
+    }
   });
+  useEffect(() => {
+    if (!visible) return undefined;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    const dialog = dialogRef.current;
+    const focusable = dialog?.querySelectorAll("button, a[href]") ?? [];
+    focusable[0]?.focus();
+
+    const handleKeyDown = (event) => {
+      if (event.key !== "Tab" || focusable.length < 2) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [visible]);
 
   const handleAccept = () => {
-    localStorage.setItem(COOKIE_KEY, "accepted");
+    saveChoice("accepted");
     setVisible(false);
   };
 
   const handleReject = () => {
-    localStorage.setItem(COOKIE_KEY, "rejected");
+    saveChoice("rejected");
     setVisible(false);
   };
 
   if (!visible) return null;
 
   return (
-    <div className="fixed inset-x-0 bottom-0 z-50 flex justify-center px-4 pb-4">
-      <div className="max-w-4xl w-full bg-[#124948] text-[#F6F0DD] rounded-2xl shadow-xl p-4 md:p-5 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
-        <div className="text-xs md:text-sm leading-relaxed">
-          <p className="font-semibold text-[11px] md:text-xs tracking-[0.18em] uppercase mb-1">
-            Política de cookies
+    <div className="cookie-consent" role="presentation">
+      <section
+        ref={dialogRef}
+        className="cookie-consent__panel"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="cookie-consent-title"
+        aria-describedby="cookie-consent-description"
+      >
+        <header className="cookie-consent__header">
+          <span className="eyebrow">Tu privacidad importa</span>
+          <h2 id="cookie-consent-title">Tú eliges cómo usamos las cookies.</h2>
+          <p id="cookie-consent-description">
+            Usamos almacenamiento local y tecnologías similares para que el sitio
+            funcione y, solo con tu autorización, para medir nuestras campañas.
           </p>
-          <p>
-            En cuarentamas.com usamos cookies propias y de terceros{" "}
-            (técnicas, de análisis y publicitarias) para recordar tus
-            preferencias, analizar el tráfico del sitio y optimizar nuestras
-            campañas y tu experiencia de compra.
-          </p>
-          <p className="mt-1 text-[11px] md:text-xs text-[#F6F0DD]/80">
-            Puedes aceptar todas las cookies o gestionar y eliminar su uso
-            desde la configuración de tu navegador en cualquier momento.
-          </p>
+        </header>
+
+        <div className="cookie-consent__details">
+          <article>
+            <span>01</span>
+            <h3>Cookies necesarias</h3>
+            <p>
+              Recuerdan tu elección y mantienen funciones básicas del sitio. Siempre
+              están activas y no se utilizan para publicidad.
+            </p>
+          </article>
+          <article>
+            <span>02</span>
+            <h3>Análisis y publicidad</h3>
+            <p>
+              Solo si aceptas se carga Meta Pixel. Puede registrar visitas y navegación
+              para medir campañas. Si rechazas, este recurso no se carga.
+            </p>
+          </article>
+          <article>
+            <span>03</span>
+            <h3>Tu elección queda guardada</h3>
+            <p>
+              Después de aceptar o rechazar, este aviso no volverá a aparecer en este
+              navegador, salvo que borres los datos guardados del sitio.
+            </p>
+          </article>
         </div>
 
-        <div className="flex md:flex-col gap-2 md:w-52">
-          <button
-            type="button"
-            onClick={handleAccept}
-            className="flex-1 md:w-full inline-flex items-center justify-center px-4 py-2 rounded-full bg-[#F6F0DD] text-[#124948] text-xs md:text-sm font-semibold hover:bg-white transition"
-          >
-            Aceptar cookies
-          </button>
-          <button
-            type="button"
-            onClick={handleReject}
-            className="flex-1 md:w-full inline-flex items-center justify-center px-4 py-2 rounded-full border border-[#F6F0DD]/70 text-[#F6F0DD] text-xs md:text-sm font-medium hover:bg-white/10 transition"
-          >
-            Rechazar
-          </button>
-        </div>
-      </div>
+        <footer className="cookie-consent__footer">
+          <small>Información vigente desde el 31 de agosto de 2026.</small>
+          <div className="cookie-consent__actions">
+            <button type="button" className="cookie-consent__reject" onClick={handleReject}>
+              Rechazar
+            </button>
+            <button type="button" className="cookie-consent__accept" onClick={handleAccept}>
+              Aceptar cookies
+            </button>
+          </div>
+        </footer>
+      </section>
     </div>
   );
 };

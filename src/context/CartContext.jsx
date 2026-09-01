@@ -1,5 +1,5 @@
 // src/context/CartContext.jsx
-import React, { createContext, useContext, useState, useMemo } from "react";
+import React, { createContext, useCallback, useContext, useMemo, useState } from "react";
 
 const CartContext = createContext();
 
@@ -8,11 +8,11 @@ export const CartProvider = ({ children }) => {
   const [isCartOpen, setIsCartOpen] = useState(false);
 
   // Solo se usan cuando el usuario hace clic en el botón flotante o iconos
-  const openCart = () => setIsCartOpen(true);
-  const closeCart = () => setIsCartOpen(false);
+  const openCart = useCallback(() => setIsCartOpen(true), []);
+  const closeCart = useCallback(() => setIsCartOpen(false), []);
 
   // 👇 Importante: aquí NO abrimos el carrito, solo agregamos
-  const addToCart = (product, quantity = 1) => {
+  const addToCart = useCallback((product, quantity = 1) => {
     setCartItems((prev) => {
       const existing = prev.find((item) => item.id === product.id);
       if (existing) {
@@ -24,9 +24,9 @@ export const CartProvider = ({ children }) => {
       }
       return [...prev, { ...product, quantity }];
     });
-  };
+  }, []);
 
-  const updateQuantity = (id, newQty) => {
+  const updateQuantity = useCallback((id, newQty) => {
     setCartItems((prev) => {
       if (newQty <= 0) {
         return prev.filter((item) => item.id !== id);
@@ -35,13 +35,13 @@ export const CartProvider = ({ children }) => {
         item.id === id ? { ...item, quantity: newQty } : item
       );
     });
-  };
+  }, []);
 
-  const removeFromCart = (id) => {
+  const removeFromCart = useCallback((id) => {
     setCartItems((prev) => prev.filter((item) => item.id !== id));
-  };
+  }, []);
 
-  const clearCart = () => setCartItems([]);
+  const clearCart = useCallback(() => setCartItems([]), []);
 
   const { cartCount, cartTotal } = useMemo(() => {
     const count = cartItems.reduce((acc, item) => acc + item.quantity, 0);
@@ -52,7 +52,7 @@ export const CartProvider = ({ children }) => {
     return { cartCount: count, cartTotal: total };
   }, [cartItems]);
 
-  const value = {
+  const value = useMemo(() => ({
     cartItems,
     cartCount,
     cartTotal,
@@ -63,7 +63,18 @@ export const CartProvider = ({ children }) => {
     clearCart,
     openCart,
     closeCart,
-  };
+  }), [
+    addToCart,
+    cartCount,
+    cartItems,
+    cartTotal,
+    clearCart,
+    closeCart,
+    isCartOpen,
+    openCart,
+    removeFromCart,
+    updateQuantity,
+  ]);
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 };

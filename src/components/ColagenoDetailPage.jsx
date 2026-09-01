@@ -1,5 +1,7 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { useCart } from "../context/CartContext.jsx";
+import { businessInfo } from "../config/businessInfo.js";
 import SiteHeader from "./SiteHeader.jsx";
 import productFront from "../assets/editorial/hero-producto-final.png";
 import productBack from "../assets/product_detail_figma_back_trimmed.png";
@@ -12,27 +14,31 @@ const product = {
 
 const formatPrice = (value) => new Intl.NumberFormat("es-CO").format(value);
 
-const productSchema = {
-  "@context": "https://schema.org",
-  "@type": "Product",
-  name: product.name,
-  description: "Péptidos de colágeno bovino tipo I y III, de sabor neutro y fáciles de integrar a la rutina diaria.",
-  brand: { "@type": "Brand", name: "40+" },
-  sku: "COLAGENO-40-200G",
-  offers: {
-    "@type": "Offer",
-    priceCurrency: "COP",
-    price: "69900",
-    availability: "https://schema.org/InStock",
-  },
-};
-
 const ColagenoDetailPage = () => {
   const { addToCart, openCart } = useCart();
   const [side, setSide] = useState("both");
   const [quantity, setQuantity] = useState(1);
   const activeImage = side === "front" ? productFront : productBack;
   const totalPrice = product.price * quantity;
+  const productSchema = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: product.name,
+    description:
+      "Péptidos de colágeno bovino hidrolizado tipo I y III, de sabor neutro, en presentación de 200 g.",
+    image: new URL(productFront, window.location.origin).href,
+    brand: { "@type": "Brand", name: businessInfo.brand },
+    manufacturer: { "@type": "Organization", name: businessInfo.manufacturer },
+    sku: "COLAGENO-40-200G",
+    offers: {
+      "@type": "Offer",
+      url: window.location.href,
+      priceCurrency: "COP",
+      price: "69900",
+      availability: "https://schema.org/InStock",
+      seller: { "@type": "Organization", name: businessInfo.legalName },
+    },
+  };
 
   const handleAdd = () => {
     addToCart({ ...product, image: productFront }, quantity);
@@ -43,7 +49,7 @@ const ColagenoDetailPage = () => {
     <main className="product-page">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }} />
       <section className="product-hero">
-        <SiteHeader logoVariant="green" />
+        <SiteHeader />
 
         <div className="product-hero__grid">
           <div className="product-gallery product-detail-stage">
@@ -98,8 +104,9 @@ const ColagenoDetailPage = () => {
             <span className="eyebrow">Péptidos de colágeno · Tipo I y III</span>
             <h1>Colágeno<br />Hidrolizado <em>40+</em></h1>
             <p className="product-buybox__lead">
-              Una fórmula sencilla, de sabor neutro, creada para acompañar tu piel,
-              huesos y articulaciones sin complicar tu rutina.
+              Creado para quienes saben que cuidarse es seguir honrando la vida.
+              Una fórmula de sabor neutro, pensada para acompañar tu bienestar diario
+              con un hábito sencillo que cabe en tu rutina.
             </p>
 
             <div className="product-facts">
@@ -109,10 +116,10 @@ const ColagenoDetailPage = () => {
             </div>
 
             <div className="product-howto">
-              <span>Cómo tomarlo</span>
+              <span>Tu ritual diario</span>
               <p>
-                Mezcla 10 g en agua, café, té, jugo o smoothie.<br />
-                <span className="product-howto__frequency">Una vez al día.</span>
+                Mezcla 10 g en agua, café, té, jugo o smoothie. Elige el momento que mejor funciona para ti<br />
+                <span className="product-howto__frequency">y disfrútalo una vez al día.</span>
               </p>
             </div>
 
@@ -130,12 +137,85 @@ const ColagenoDetailPage = () => {
             </div>
 
             <button type="button" className="button button--orange product-buy-button" onClick={handleAdd}>
-              Agregar y continuar <span aria-hidden="true">↗</span>
+              Agregar a mi rutina <span aria-hidden="true">↗</span>
             </button>
             <p className="product-buybox__note">
-              Compra segura · Envíos a toda Colombia
+              IVA incluido · Envíos a toda Colombia
             </p>
           </div>
+        </div>
+      </section>
+
+      <section className="product-information" aria-labelledby="product-information-title">
+        <div className="product-information__heading">
+          <div>
+            <span className="eyebrow">Información del producto</span>
+            <h2 id="product-information-title">Lo que contiene tu 40+.</h2>
+          </div>
+          <p>
+            Información tomada de la etiqueta del empaque. Revisa siempre el producto recibido
+            antes de consumirlo y conserva el envase para consultar sus indicaciones.
+          </p>
+        </div>
+
+        <div className="product-information__grid">
+          <article className="product-information__card product-information__card--nutrition">
+            <span className="product-information__number">01</span>
+            <h3>Información nutricional</h3>
+            <p className="product-information__portion">
+              Tamaño de porción: 2 cucharaditas (10 g) · 20 porciones aprox.
+            </p>
+            <div className="nutrition-table-wrap">
+              <table className="nutrition-table">
+                <thead>
+                  <tr><th>Nutriente</th><th>Por porción</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>Calorías</td><td>36 kcal</td></tr>
+                  <tr><td>Grasa total</td><td>0 g</td></tr>
+                  <tr><td>Carbohidratos totales</td><td>0 g</td></tr>
+                  <tr><td>Azúcares totales y añadidos</td><td>0 g</td></tr>
+                  <tr><td>Proteína</td><td>9,2 g</td></tr>
+                  <tr><td>Sodio</td><td>2 mg</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </article>
+
+          <article className="product-information__card">
+            <span className="product-information__number">02</span>
+            <h3>Ingredientes y uso</h3>
+            <dl className="product-information__list">
+              <div><dt>Ingredientes</dt><dd>Péptidos de colágeno y colágeno hidrolizado.</dd></div>
+              <div>
+                <dt>Cómo tomarlo</dt>
+                <dd>
+                  Disuelve 10 g —aproximadamente 2 cucharaditas— en 100 mL de agua.
+                  Tómalo una vez al día, preferiblemente en la mañana.
+                </dd>
+              </div>
+              <div><dt>Sabor</dt><dd>Neutro.</dd></div>
+            </dl>
+          </article>
+
+          <article className="product-information__card product-information__card--warning">
+            <span className="product-information__number">03</span>
+            <h3>Advertencias y conservación</h3>
+            <ul>
+              <li>No excedas la dosis recomendada.</li>
+              <li>No consumir durante el embarazo o la lactancia.</li>
+              <li>Mantener fuera del alcance de los niños.</li>
+              <li>Conservar en un lugar fresco y seco, protegido de la luz y el calor.</li>
+              <li>Este producto no reemplaza una alimentación balanceada ni un estilo de vida saludable.</li>
+            </ul>
+          </article>
+        </div>
+
+        <div className="product-traceability">
+          <div><span>Fabricado en Colombia por</span><strong>{businessInfo.manufacturer}</strong></div>
+          <div><span>Notificación sanitaria</span><strong>{businessInfo.sanitaryNotification}</strong></div>
+          <div><span>Atención al cliente</span><a href={`mailto:${businessInfo.email}`}>{businessInfo.email}</a></div>
+          <Link to="/envios-cambios-y-devoluciones">Ver envíos, cambios y devoluciones →</Link>
         </div>
       </section>
     </main>

@@ -1,17 +1,19 @@
 # 40+ Commerce Ecosystem
 
-Plataforma web comercial de 40+ orientada a presentar la marca y su catálogo de bienestar, ofrecer información del producto, gestionar un carrito y conectar el recorrido de compra con Tiendanube. El proyecto también contiene un flujo opcional de solicitud de membresía conectado a n8n.
+Sitio comercial de 40+ para presentar la marca, informar sobre el Colágeno Hidrolizado 40+, preparar pedidos por WhatsApp y recibir experiencias de clientes. El formulario está preparado para conectarse mediante webhook con Make.
 
 ## Funcionalidades implementadas
 
 - Landing pública de la marca y navegación mediante rutas de React.
-- Catálogo y detalle del producto Colágeno Hidrolizado 40+.
-- Carrito en el navegador con selección de cantidad y resumen de compra.
-- Creación de una orden preliminar de checkout mediante una función serverless que usa la API de Tiendanube.
-- Servidor Express para desarrollo local con rutas de salud, autorización de Tiendanube, consulta de productos, checkout y membresía.
-- Formulario de membresía, activable mediante una bandera pública, que envía la solicitud a un webhook de n8n desde el servidor.
+- Detalle del Colágeno Hidrolizado 40+ con información nutricional, ingredientes, modo de uso, advertencias y trazabilidad visibles.
+- Carrito con selección de cantidad, tarifas de envío y continuación del pedido por WhatsApp.
+- Contacto directo por WhatsApp, correo e Instagram; páginas de términos, tratamiento de datos, envíos, cambios y devoluciones; y un aviso inicial de preferencias de cookies.
+- Servidor Express para desarrollo local con salud, autorización de Tiendanube y rutas de integración protegidas por banderas de entorno.
+- Las rutas antiguas de checkout, administración de Tiendanube y membresía permanecen deshabilitadas por defecto mientras el pedido continúe por WhatsApp.
+- Página para compartir la experiencia con 40+ y solicitar por correo el e-book Ritual 40+, protegida con Cloudflare Turnstile y lista para conectarse a un webhook.
+- Archivo público del e-book disponible para que la automatización de correo lo enlace desde `/downloads/ebook-ritual-40.pdf`.
 - Experiencia visual 3D de producto con Three.js.
-- Metadatos SEO, banner de cookies y páginas públicas de términos y política de datos.
+- Metadatos SEO y sociales, sitemap, banner de cookies con consentimiento previo y configuración de rutas para Vercel.
 
 No existe un sistema POS implementado en este repositorio. Un POS se considera una demostración o una extensión futura.
 
@@ -70,12 +72,20 @@ Vite redirige las solicitudes a `/api` hacia el servidor local en el puerto conf
 - `TIENDANUBE_PRODUCT_ID`: identificador del producto configurado.
 - `TIENDANUBE_VARIANT_ID`: identificador de la variante usada por checkout.
 - `TIENDANUBE_STORE_FRONT_URL`: URL pública de la tienda.
-- `N8N_MEMBRESIA_WEBHOOK_URL`: endpoint del flujo de membresía.
-- `N8N_MEMBRESIA_WEBHOOK_TOKEN`: token opcional del webhook de membresía.
+- `EXPERIENCE_WEBHOOK_URL`: endpoint de Make que recibirá las experiencias.
+- `EXPERIENCE_WEBHOOK_TOKEN`: token opcional para autenticar el webhook.
+- `PUBLIC_SITE_URL`: dominio público usado para construir el enlace seguro al e-book.
+- `TURNSTILE_SECRET_KEY`: clave privada usada por el servidor para validar cada desafío de Cloudflare Turnstile.
+- `TURNSTILE_EXPECTED_ACTION`: debe conservar el valor `experience_form`.
+- `TURNSTILE_ALLOWED_HOSTNAMES`: dominios autorizados, separados por comas.
+- `ENABLE_TIENDANUBE_CHECKOUT`: debe seguir en `false` mientras el checkout se gestione por WhatsApp.
+- `ENABLE_TIENDANUBE_ADMIN_ROUTES`: habilita de forma explícita las rutas locales de administración de Tiendanube.
+- `ALLOWED_ORIGINS`: orígenes autorizados para el servidor Express local.
 
 ### Frontend
 
-- `VITE_ENABLE_MEMBRESIA`: habilita la ruta pública de membresía cuando su valor es `true`.
+- `VITE_META_PIXEL_ID`: identificador público del píxel de Meta, que solo se carga después de aceptar cookies.
+- `VITE_TURNSTILE_SITE_KEY`: clave pública del widget Cloudflare Turnstile.
 
 Todas las variables `VITE_*` se incluyen en el código del navegador y son públicas. Nunca deben contener secretos, tokens ni credenciales.
 
@@ -90,4 +100,4 @@ Todas las variables `VITE_*` se incluyen en el código del navegador y son públ
 
 ## Estado actual
 
-Este repositorio representa la versión inicial separada del proyecto existente. Conserva las funcionalidades demostradas por el código y no incluye optimizaciones de recursos, rediseños, mejoras funcionales ni un POS. Las integraciones requieren configuración externa y no se ejecutan durante el proceso de compilación.
+La interfaz, las rutas y las validaciones locales están preparadas para publicación. Antes de activar el formulario en producción se debe crear el escenario de automatización, generar las claves reales de Turnstile, activar DKIM y configurar las variables en Vercel. Consulta `docs/PUBLICACION.md`, `docs/DNS-CORREO.md` y `docs/MAKE.md` para la lista final.

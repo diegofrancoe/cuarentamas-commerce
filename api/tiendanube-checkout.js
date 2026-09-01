@@ -2,14 +2,27 @@
 import axios from "axios";
 
 export default async function handler(req, res) {
+  res.setHeader("Cache-Control", "no-store");
+
   if (req.method !== "POST") {
-    return res.status(405).json({ error: "Method not allowed" });
+    res.setHeader("Allow", "POST");
+    return res.status(405).json({ error: "Método no permitido." });
   }
 
-  const { items = [], total, customerEmail } = req.body || {};
+  if (process.env.ENABLE_TIENDANUBE_CHECKOUT !== "true") {
+    return res.status(404).json({ error: "Ruta no disponible." });
+  }
 
-  console.log("🛒 [Vercel] /api/tiendanube-checkout – carrito recibido:");
-  console.log(JSON.stringify({ items, total, customerEmail }, null, 2));
+  if (!String(req.headers["content-type"] || "").toLowerCase().startsWith("application/json")) {
+    return res.status(415).json({ error: "El contenido debe enviarse como JSON." });
+  }
+
+  const contentLength = Number(req.headers["content-length"] || 0);
+  if (Number.isFinite(contentLength) && contentLength > 32 * 1024) {
+    return res.status(413).json({ error: "La solicitud supera el tamaño permitido." });
+  }
+
+  const { items = [], customerEmail } = req.body || {};
 
   const STORE_ID = process.env.TIENDANUBE_STORE_ID;
   const ACCESS_TOKEN = process.env.TIENDANUBE_ACCESS_TOKEN;
@@ -38,7 +51,13 @@ export default async function handler(req, res) {
       : fallbackEmail;
 
   try {
-    const quantity = 1;
+    const quantity = Math.min(
+      99,
+      items.reduce((sum, item) => sum + Math.max(0, Number(item.quantity) || 0), 0),
+    );
+    if (!quantity) {
+      return res.status(400).json({ error: "La cantidad no es válida" });
+    }
 
     const draftOrderPayload = {
       contact_name: "Cliente",
@@ -54,11 +73,6 @@ export default async function handler(req, res) {
       ],
     };
 
-    console.log(
-      "📦 [Vercel] Payload que enviamos a /draft_orders:",
-      JSON.stringify(draftOrderPayload, null, 2)
-    );
-
     const url = `https://api.tiendanube.com/v1/${STORE_ID}/draft_orders`;
 
     const { data } = await axios.post(url, draftOrderPayload, {
@@ -69,19 +83,12 @@ export default async function handler(req, res) {
       },
     });
 
-    console.log("✅ [Vercel] Draft order creado en Tiendanube:");
-    console.log(JSON.stringify(data, null, 2));
-
     const checkoutUrl = data.checkout_url;
 
     if (!checkoutUrl) {
-      console.warn(
-        "⚠️ La respuesta no trajo checkout_url, devolviendo data cruda"
-      );
-      return res.status(200).json({
-        ok: true,
-        data,
-        checkoutUrl: null,
+      console.warn("La respuesta de Tiendanube no incluyó una URL de checkout.");
+      return res.status(502).json({
+        error: "Tiendanube no devolvió una URL de checkout.",
       });
     }
 
@@ -97,7 +104,6 @@ export default async function handler(req, res) {
 
     return res.status(500).json({
       error: "No se pudo crear el checkout en Tiendanube",
-      details: error.response?.data || error.message,
     });
   }
 }
