@@ -99,7 +99,7 @@ const Cart = () => {
       `  Subtotal: ${formatCurrency(item.price * item.quantity)}`,
     ]);
     const message = [
-      "Hola, quiero finalizar mi pedido en Cuarenta Más:",
+      "Hola, quiero finalizar mi pedido en cuarentamas:",
       "",
       ...lines,
       "",

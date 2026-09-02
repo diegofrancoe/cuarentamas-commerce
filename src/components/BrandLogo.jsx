@@ -9,13 +9,13 @@ const BrandLogo = ({ className = "", to, variant = "cream" }) => {
 
   if (to) {
     return (
-      <Link to={to} className={classes} aria-label="Cuarenta Más, ir al inicio">
+      <Link to={to} className={classes} aria-label="cuarentamas, ir al inicio">
         {image}
       </Link>
     );
   }
 
-  return <div className={classes} role="img" aria-label="Cuarenta Más">{image}</div>;
+  return <div className={classes} role="img" aria-label="cuarentamas">{image}</div>;
 };
 
 export default BrandLogo;
