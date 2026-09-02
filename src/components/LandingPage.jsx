@@ -230,7 +230,11 @@ const LandingPage = () => {
               />
               <span className="product-campaign__contact-shadow" aria-hidden="true" />
               <span className="product-campaign__impact-ring" aria-hidden="true" />
-              <div className="product-campaign__pack" role="img" aria-label="Doypack de Colágeno Hidrolizado 40+">
+              <Link
+                className="product-campaign__pack"
+                to="/producto/colageno-hidrolizado-40"
+                aria-label="Ver Colágeno Hidrolizado 40+"
+              >
                 <img
                   src={heroProduct}
                   alt=""
@@ -248,7 +252,7 @@ const LandingPage = () => {
                   className="product-campaign__pack-shine"
                   aria-hidden="true"
                 />
-              </div>
+              </Link>
               <img
                 src={heroPodium}
                 alt=""

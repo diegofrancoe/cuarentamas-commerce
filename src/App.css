@@ -291,6 +291,13 @@
   backface-visibility: hidden;
   will-change: transform;
   animation: pack-axis-settle 1.65s cubic-bezier(.2, .78, .22, 1) both;
+  cursor: pointer;
+}
+
+.product-campaign__pack:focus-visible {
+  outline: 3px solid var(--bone);
+  outline-offset: 8px;
+  border-radius: 18px;
 }
 
 .product-campaign__pack:hover {
