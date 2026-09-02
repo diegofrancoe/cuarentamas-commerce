@@ -1329,6 +1329,10 @@
   .site-nav { gap: 7px; font-size: .62rem; }
   .brand-mark { width: 64px; }
 
+  /* En pantallas pequeñas las flechas diagonales pueden convertirse en emoji. */
+  .button > span[aria-hidden="true"] { display: none; }
+  .button { gap: 0; }
+
   .landing-hero__grid,
   .product-hero__grid,
   .cart-hero__grid,
@@ -1347,7 +1351,7 @@
   .product-campaign__facts strong { font-size: 1rem; }
   .product-campaign__facts small { font-size: .5rem; }
   .landing-hero__copy { min-height: 530px; padding: 56px 24px 30px; }
-  .landing-hero__copy h1 { font-size: 3.6rem; }
+  .landing-hero__copy h1 { font-size: clamp(3.15rem, 14.6vw, 3.6rem); }
   .landing-hero__copy > p { font-size: .96rem; }
   .hero-actions { align-items: flex-start; flex-direction: column; gap: 14px; }
   .hero-proof { line-height: 1.4; }
@@ -1356,7 +1360,7 @@
   .recipe-grid,
   .why-panel { width: calc(100% - 28px); }
   .section-intro { padding-top: 84px; }
-  .section-intro h2 { font-size: 3.15rem; }
+  .section-intro h2 { font-size: clamp(2.7rem, 12.4vw, 3.15rem); }
   .recipe-card__image-wrap { height: 330px; }
   .recipe-modal { top: auto; right: 12px; bottom: 12px; left: 12px; width: auto; padding: 0; }
   .recipe-modal::before { display: none; }
@@ -1365,11 +1369,11 @@
   .recipe-modal__heading { padding-right: 20px; }
   .recipe-modal__heading h2 { font-size: 2.45rem; }
   .why-panel { margin-top: 84px; padding: 42px 24px; }
-  .why-panel h2 { font-size: 3.1rem; }
+  .why-panel h2 { font-size: clamp(2.35rem, 10.7vw, 2.8rem); line-height: 1; }
   .why-panel__product { min-height: 360px; }
   .why-panel__product img { max-height: 410px; }
   .landing-footer { --footer-gutter: 22px; padding-inline: var(--footer-gutter); }
-  .landing-footer h2 { font-size: clamp(2.8rem, 13vw, 3.35rem); overflow-wrap: break-word; }
+  .landing-footer h2 { font-size: clamp(2.55rem, 11.8vw, 3.05rem); }
   .landing-ritual { width: min(78vw, 330px); margin-left: 12px; }
   .landing-ritual__badge { left: -12px; }
   .landing-ritual__note { right: -12px; }
@@ -1380,16 +1384,16 @@
   .experience-intro,
   .experience-form-wrap { padding: 48px 22px; }
   .experience-intro { min-height: 540px; }
-  .experience-intro h1 { font-size: clamp(3.15rem, 15vw, 4rem); overflow-wrap: break-word; }
+  .experience-intro h1 { font-size: clamp(2.9rem, 13.5vw, 3.55rem); }
   .experience-gift { grid-template-columns: 96px minmax(0, 1fr); gap: 16px; padding: 12px; }
   .experience-gift__copy h2 { font-size: 1.35rem; }
   .experience-gift__copy p { font-size: .7rem; }
   .experience-fields-two { grid-template-columns: 1fr; }
-  .experience-form-wrap h2 { font-size: clamp(2.7rem, 13vw, 3.2rem); overflow-wrap: break-word; }
+  .experience-form-wrap h2 { font-size: clamp(2.4rem, 11.6vw, 2.95rem); }
 
   .legal-shell { width: calc(100% - 20px); border-radius: 26px; }
   .legal-hero { padding: 56px 24px; }
-  .legal-hero h1 { font-size: clamp(2.7rem, 13vw, 3.65rem); overflow-wrap: break-word; }
+  .legal-hero h1 { font-size: clamp(2.5rem, 11.8vw, 3.25rem); }
   .legal-body { padding: 46px 24px; }
 
   .product-gallery { min-height: 540px; }
@@ -1409,10 +1413,10 @@
   .product-gallery__thumbs button { width: 70px; min-height: 84px; grid-template-rows: 52px auto; }
   .product-gallery__thumbs img { max-width: 46px; height: 50px; }
   .product-buybox { padding: 54px 24px; }
-  .product-buybox h1 { font-size: clamp(3.05rem, 14vw, 3.75rem); overflow-wrap: break-word; }
+  .product-buybox h1 { font-size: clamp(2.8rem, 12.8vw, 3.45rem); }
   .product-information { width: calc(100% - 28px); margin-block: 42px 58px; }
   .product-information__heading { padding-inline: 2px; }
-  .product-information__heading h2 { font-size: 2.7rem; }
+  .product-information__heading h2 { font-size: clamp(2.25rem, 10.8vw, 2.6rem); }
   .product-information__card { padding: 21px 18px; border-radius: 18px; }
   .product-information__list div { grid-template-columns: 1fr; gap: 6px; }
   .product-traceability { padding: 18px 2px 0; grid-template-columns: 1fr; gap: 14px; }
@@ -1425,7 +1429,7 @@
 
   .cart-summary,
   .checkout-form-wrap { padding: 48px 22px; }
-  .cart-summary h2 { font-size: 3.7rem; }
+  .cart-summary h2 { font-size: clamp(2.85rem, 13vw, 3.35rem); }
   .cart-line { grid-template-columns: 112px 1fr; gap: 15px; }
   .cart-line__image { min-height: 170px; }
   .cart-line__image > span,
@@ -1434,10 +1438,26 @@
   .cart-line__info h3 { font-size: 1rem; }
   .cart-line__actions { align-items: flex-start; flex-direction: column; gap: 12px; }
   .quantity-control { min-width: 120px; }
-  .checkout-form-wrap h2 { font-size: 3rem; }
+  .checkout-form-wrap h2 { font-size: clamp(2.55rem, 11.8vw, 2.9rem); }
   .checkout-form { grid-template-columns: 1fr; }
   .checkout-field--wide { grid-column: auto; }
   .checkout-button { padding-inline: 18px; gap: 10px; font-size: .86rem; }
+
+  .landing-hero__copy h1,
+  .section-intro h2,
+  .why-panel h2,
+  .landing-footer h2,
+  .experience-intro h1,
+  .experience-form-wrap h2,
+  .legal-hero h1,
+  .product-buybox h1,
+  .product-information__heading h2,
+  .cart-summary h2,
+  .checkout-form-wrap h2 {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+    text-wrap: balance;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
