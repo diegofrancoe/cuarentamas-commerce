@@ -30,3 +30,6 @@ coverage/
 .idea/
 .vscode/
 *.swp
+
+# Generated spreadsheet and preview artifacts
+outputs/

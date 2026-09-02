@@ -359,7 +359,7 @@ app.post("/api/experiencia", async (req, res) => {
 
     const headers = { "Content-Type": "application/json" };
     if (EXPERIENCE_WEBHOOK_TOKEN) {
-      headers.Authorization = `Bearer ${EXPERIENCE_WEBHOOK_TOKEN}`;
+      headers["x-make-apikey"] = EXPERIENCE_WEBHOOK_TOKEN;
     }
 
     await axios.post(EXPERIENCE_WEBHOOK_URL, payload, {

@@ -73,7 +73,7 @@ Vite redirige las solicitudes a `/api` hacia el servidor local en el puerto conf
 - `TIENDANUBE_VARIANT_ID`: identificador de la variante usada por checkout.
 - `TIENDANUBE_STORE_FRONT_URL`: URL pública de la tienda.
 - `EXPERIENCE_WEBHOOK_URL`: endpoint de Make que recibirá las experiencias.
-- `EXPERIENCE_WEBHOOK_TOKEN`: token opcional para autenticar el webhook.
+- `EXPERIENCE_WEBHOOK_TOKEN`: clave privada del webhook de Make enviada como `x-make-apikey`.
 - `PUBLIC_SITE_URL`: dominio público usado para construir el enlace seguro al e-book.
 - `TURNSTILE_SECRET_KEY`: clave privada usada por el servidor para validar cada desafío de Cloudflare Turnstile.
 - `TURNSTILE_EXPECTED_ACTION`: debe conservar el valor `experience_form`.

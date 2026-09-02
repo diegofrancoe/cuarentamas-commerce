@@ -214,7 +214,15 @@ const ColagenoDetailPage = () => {
         <div className="product-traceability">
           <div><span>Fabricado en Colombia por</span><strong>{businessInfo.manufacturer}</strong></div>
           <div><span>Notificación sanitaria</span><strong>{businessInfo.sanitaryNotification}</strong></div>
-          <div><span>Atención al cliente</span><a href={`mailto:${businessInfo.email}`}>{businessInfo.email}</a></div>
+          <div>
+            <span>Atención al cliente</span>
+            <a
+              href={`mailto:${businessInfo.email}?subject=${encodeURIComponent("Consulta sobre Colágeno Hidrolizado 40+")}`}
+              aria-label={`Enviar un correo a ${businessInfo.email}`}
+            >
+              {businessInfo.email}
+            </a>
+          </div>
           <Link to="/envios-cambios-y-devoluciones">Ver envíos, cambios y devoluciones →</Link>
         </div>
       </section>

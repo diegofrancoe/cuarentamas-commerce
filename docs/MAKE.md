@@ -90,7 +90,7 @@ No publicar ni reutilizar el texto si `autorizacionTestimonio` es falso.
 Crear en Vercel:
 
 - `EXPERIENCE_WEBHOOK_URL`: URL del webhook de Make.
-- `EXPERIENCE_WEBHOOK_TOKEN`: token acordado para validar las solicitudes, si el escenario lo admite.
+- `EXPERIENCE_WEBHOOK_TOKEN`: clave privada configurada en el webhook de Make; el servidor la envía en el encabezado `x-make-apikey`.
 - `PUBLIC_SITE_URL=https://cuarentamas.com`.
 
 Antes de activar el formulario públicamente, crear el widget de Cloudflare Turnstile y configurar sus claves pública y privada en Vercel. También se deben configurar SPF, DKIM y DMARC para el dominio que enviará los correos.
@@ -104,3 +104,12 @@ Usar un correo controlado por 40+ y comprobar una sola vez:
 - El cliente recibe un solo correo y el enlace abre el e-book.
 - Repetir el mismo `submissionId` no envía otro correo.
 - Un error de correo queda registrado y puede reintentarse sin duplicar el resto del flujo.
+
+## Estado de continuidad — 1 de septiembre de 2026
+
+- El webhook recibe correctamente una solicitud válida y responde `Accepted`.
+- Cloudflare Turnstile y las variables necesarias están configurados para producción en Vercel.
+- Se creó en Google Drive, dentro de la carpeta `Cuarentamas Web`, la hoja nativa `Cuarenta Más · Experiencias Web` con las columnas de registro, estado y error.
+- El escenario `40+ · Experiencias y e-book Ritual 40+` queda **inactivo** hasta finalizar la prueba de aceptación.
+- Antes de activarlo, sustituir los dos módulos de Microsoft 365 Excel por Google Sheets, apuntando a la pestaña `Experiencias` de la hoja anterior.
+- Después de guardar el escenario, ejecutar la prueba completa de este documento y confirmar que los dos correos salen desde `contacto@cuarentamas.com`.

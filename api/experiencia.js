@@ -162,7 +162,7 @@ export default async function handler(req, res) {
 
     const headers = { "Content-Type": "application/json" };
     if (webhookToken) {
-      headers.Authorization = `Bearer ${webhookToken}`;
+      headers["x-make-apikey"] = webhookToken;
     }
 
     await axios.post(webhookUrl, payload, {

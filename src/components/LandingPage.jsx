@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import SiteHeader from "./SiteHeader.jsx";
 import BrandLogo from "./BrandLogo.jsx";
@@ -80,16 +80,21 @@ const recipes = [
 const LandingPage = () => {
   const navigate = useNavigate();
   const [activeRecipe, setActiveRecipe] = useState(null);
+  const [recipePosition, setRecipePosition] = useState(null);
   const recipeCloseRef = useRef(null);
+  const recipeDialogRef = useRef(null);
   const recipeTriggerRef = useRef(null);
+  const recipeCardRef = useRef(null);
 
   const closeRecipe = useCallback(() => {
     setActiveRecipe(null);
+    setRecipePosition(null);
     window.requestAnimationFrame(() => recipeTriggerRef.current?.focus());
   }, []);
 
   const openRecipe = (recipe, event) => {
     recipeTriggerRef.current = event.currentTarget;
+    recipeCardRef.current = event.currentTarget.closest(".recipe-card");
     setActiveRecipe(recipe);
   };
 
@@ -125,6 +130,59 @@ const LandingPage = () => {
       window.removeEventListener("keydown", closeOnEscape);
     };
   }, [activeRecipe, closeRecipe]);
+
+  useLayoutEffect(() => {
+    if (!activeRecipe) return undefined;
+
+    const updateRecipePosition = () => {
+      const card = recipeCardRef.current;
+      if (!card) return;
+
+      const cardRect = card.getBoundingClientRect();
+      const viewportPadding = 16;
+      const gap = 18;
+      const modalWidth = Math.min(420, window.innerWidth - viewportPadding * 2);
+      const measuredHeight = recipeDialogRef.current?.getBoundingClientRect().height;
+      const modalHeight = measuredHeight || Math.min(window.innerHeight * 0.72, 620);
+      const availableLeft = cardRect.left - modalWidth - gap;
+      const availableRight = cardRect.right + gap;
+
+      let left;
+      let placement;
+
+      if (availableLeft >= viewportPadding) {
+        left = availableLeft;
+        placement = "left";
+      } else if (availableRight + modalWidth <= window.innerWidth - viewportPadding) {
+        left = availableRight;
+        placement = "right";
+      } else {
+        left = Math.min(
+          Math.max(cardRect.left, viewportPadding),
+          window.innerWidth - modalWidth - viewportPadding,
+        );
+        placement = "overlap";
+      }
+
+      const top = Math.min(
+        Math.max(cardRect.top + 16, viewportPadding),
+        Math.max(viewportPadding, window.innerHeight - modalHeight - viewportPadding),
+      );
+
+      setRecipePosition({ left, top, placement });
+    };
+
+    updateRecipePosition();
+    const frame = window.requestAnimationFrame(updateRecipePosition);
+    window.addEventListener("resize", updateRecipePosition);
+    window.addEventListener("scroll", updateRecipePosition, true);
+
+    return () => {
+      window.cancelAnimationFrame(frame);
+      window.removeEventListener("resize", updateRecipePosition);
+      window.removeEventListener("scroll", updateRecipePosition, true);
+    };
+  }, [activeRecipe]);
 
   const goToProduct = () => navigate("/producto/colageno-hidrolizado-40");
   const goToExperience = () => navigate("/comparte-tu-experiencia");
@@ -284,16 +342,32 @@ const LandingPage = () => {
           <button
             type="button"
             className="landing-ritual"
+            data-reveal
             onClick={goToExperience}
             aria-label="Conocer el e-book Ritual 40+ y compartir mi experiencia"
           >
             <span className="landing-ritual__badge">E-book de regalo</span>
-            <img
-              src={ritualCover}
-              alt="Portada del e-book Ritual 40+"
-              loading="lazy"
-              decoding="async"
-            />
+            <span className="landing-ritual__cover">
+              <img
+                src={ritualCover}
+                alt="Portada del e-book Ritual 40+"
+                className="landing-ritual__image"
+                loading="lazy"
+                decoding="async"
+              />
+              <img
+                src={ritualCover}
+                alt=""
+                className="landing-ritual__shine landing-ritual__shine--entry"
+                aria-hidden="true"
+              />
+              <img
+                src={ritualCover}
+                alt=""
+                className="landing-ritual__shine landing-ritual__shine--hover"
+                aria-hidden="true"
+              />
+            </span>
             <span className="landing-ritual__note">
               <strong>Un detalle para agradecerte</strong>
               <span>Recíbelo al compartir tu historia</span>
@@ -341,8 +415,17 @@ const LandingPage = () => {
       </footer>
 
       {activeRecipe && (
-        <div className="recipe-modal" role="presentation">
+        <div
+          className="recipe-modal"
+          role="presentation"
+          data-placement={recipePosition?.placement || "left"}
+          style={recipePosition ? {
+            "--recipe-modal-left": `${recipePosition.left}px`,
+            "--recipe-modal-top": `${recipePosition.top}px`,
+          } : undefined}
+        >
           <section
+            ref={recipeDialogRef}
             className="recipe-modal__dialog"
             role="dialog"
             aria-labelledby="recipe-modal-title"

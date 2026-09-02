@@ -51,7 +51,7 @@ El escenario debe recibir el webhook de `/api/experiencia` y realizar, como mín
 Después de crear el escenario, configurar en Vercel:
 
 - `EXPERIENCE_WEBHOOK_URL`
-- `EXPERIENCE_WEBHOOK_TOKEN`, si Make valida un token
+- `EXPERIENCE_WEBHOOK_TOKEN`: clave privada del webhook de Make enviada como `x-make-apikey`
 - `PUBLIC_SITE_URL=https://cuarentamas.com`
 - `VITE_META_PIXEL_ID`
 - `VITE_TURNSTILE_SITE_KEY`
