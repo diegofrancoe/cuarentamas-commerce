@@ -33,3 +33,8 @@ coverage/
 
 # Generated spreadsheet and preview artifacts
 outputs/
+
+# Raw Make exports and private communication/debug artifacts
+*.blueprint.json
+*.eml
+*.har

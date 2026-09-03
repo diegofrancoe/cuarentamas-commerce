@@ -1,81 +1,85 @@
-# Preparación para publicar 40+
+# Publicación y mantenimiento
 
-## Ya resuelto en el proyecto
+[Volver al README](../README.md) · Corte: 2026-09-02. El sitio ya está publicado; esta guía sustituye la antigua lista que lo describía como pendiente.
 
-- Navegación y diseño adaptable para laptop, tablet y celular, con rutas públicas directas.
-- Página del producto con precio, contenido, porciones, tabla nutricional, ingredientes, uso, advertencias y notificación sanitaria.
-- Carrito coherente con el proceso actual: prepara el pedido y continúa por WhatsApp; no afirma que el pago ya fue realizado.
-- Aceptación de términos y política de datos en el pedido.
-- Contacto directo por WhatsApp, correo e Instagram; páginas de términos, tratamiento de datos y envíos/devoluciones; y un aviso inicial de preferencias de cookies.
-- Meta Pixel bloqueado hasta que la persona acepte las cookies.
-- Formulario de experiencia con consentimiento obligatorio, autorización opcional para publicar el testimonio, Cloudflare Turnstile y validación del desafío en el servidor.
-- Límite local de cinco intentos por hora para reducir envíos automatizados simples.
-- E-book disponible en `/downloads/ebook-ritual-40.pdf`.
-- SEO, imagen social, robots, sitemap y soporte de rutas directas en Vercel.
-- Política de seguridad de contenido, HSTS, protección contra inclusión en marcos, restricciones de permisos y respuestas API sin caché en Vercel.
-- Rutas antiguas de checkout y administración de Tiendanube cerradas por defecto; la antigua API de membresía fue retirada.
-- El formulario solo usa `EXPERIENCE_WEBHOOK_URL`; ya no reutiliza automáticamente ninguna configuración anterior de n8n.
-- Solicitudes JSON limitadas a 32 KB, validación de tipo de contenido y limpieza periódica del límite de intentos.
-- El carrito bloquea el fondo, conserva el foco dentro del diálogo y puede cerrarse con Escape.
+## Configuración de producción
 
-## Datos verificados en la documentación
+| Ajuste | Valor documentado |
+| --- | --- |
+| Repositorio | `diegofrancoe/cuarentamas-commerce` |
+| Rama de producción | `main` |
+| Proyecto Vercel | `cuarentamas` |
+| Equipo Vercel | `diego-franco-s-projects` |
+| Root Directory | Vacío: raíz de este repositorio |
+| Framework | Vite |
+| Build / salida | `npm run build` / `dist` |
+| Funciones | Directorio `api/` |
+| Dominio | `https://cuarentamas.com` |
 
-Revisión realizada el 31 de agosto de 2026 contra el certificado de existencia, el registro mercantil y la guía de producto suministrados:
+La conexión anterior al repositorio `portfolio` y raíz `projects/cuarentamas` fue corregida. No reutilizar esa configuración para este repositorio. Vercel enlazado a Git no significa que Make, DNS o Drive queden desplegados por el mismo commit.
 
-- Razón social exacta: `ZENTIA HEALTHCARE GROUP S.A.S.`.
-- Fabricante declarado: `ZENTIA HEALTHCARE GROUP S.A.S.`.
-- NIT: `901.977.632-6`.
-- Dirección: `Carrera 9A No. 117A-65, apartamento 301, Bogotá D.C., Colombia`.
-- Correo: `contacto@cuarentamas.com`.
-- Teléfono y WhatsApp: `+57 (320) 909-9105`.
-- Notificación sanitaria: `NSA-0013618-2023`.
-- Tarifas: `$6.000` para Bogotá y `$16.000` para el resto de Colombia.
-- La guía, transportadora, número de seguimiento y tiempo estimado de llegada se informan por WhatsApp después del despacho.
-- Retracto, garantía y reversión están descritos en la política pública de envíos y devoluciones.
-- Los textos comerciales fueron ajustados a la guía de comunicación responsable entregada.
-- Precio público vigente configurado en el sitio: `$69.900 COP`.
+## Variables y fronteras
 
-Si cambia alguno de estos datos, actualizar `src/config/businessInfo.js`, el carrito y las páginas legales antes de publicar.
+La plantilla versionada es [`.env.example`](../.env.example). Nunca copiar valores privados a documentación, issues, screenshots ni commits.
 
-## Flujo pendiente en Make
+| Variable | Ubicación / uso |
+| --- | --- |
+| `EXPERIENCE_WEBHOOK_URL` | Secreto operativo del backend: endpoint privado Make |
+| `EXPERIENCE_WEBHOOK_TOKEN` | Solo servidor; clave enviada como `x-make-apikey` |
+| `PUBLIC_SITE_URL` | Servidor; `https://cuarentamas.com`; base del enlace al PDF |
+| `TURNSTILE_SECRET_KEY` | Solo servidor; validación Cloudflare |
+| `TURNSTILE_EXPECTED_ACTION` | Servidor; `experience_form` |
+| `TURNSTILE_ALLOWED_HOSTNAMES` | Servidor; `cuarentamas.com,www.cuarentamas.com` en producción |
+| `VITE_TURNSTILE_SITE_KEY` | Pública, incorporada al build del frontend |
+| `VITE_META_PIXEL_ID` | Identificador público; PageView tras consentimiento |
+| `PORT`, `ALLOWED_ORIGINS` | Servidor Express local; Vite apunta a 4000 |
+| `ENABLE_TIENDANUBE_CHECKOUT` | Mantener `false` mientras el pedido sea por WhatsApp |
+| `ENABLE_TIENDANUBE_ADMIN_ROUTES` | Mantener `false`; rutas locales históricas no operativas |
+| `TIENDANUBE_*` | Variables históricas de aplicación, tienda, variante y token; no necesarias para el flujo actual |
+| `VITE_ENABLE_MEMBRESIA` | Vestigio de configuración; no activa una ruta actual |
 
-El escenario debe recibir el webhook de `/api/experiencia` y realizar, como mínimo:
+Cambiar `VITE_*` exige reconstruir. Separar Production / Preview / Development y no enviar pruebas de preview a clientes reales. Que las variables tengan nombre en el repo no demuestra que tengan valor en cada entorno.
 
-1. Guardar nombre, correo, celular, ciudad, experiencia, fecha, versión de la política y autorizaciones.
-2. Avisar a `contacto@cuarentamas.com` que llegó una experiencia nueva.
-3. Enviar al cliente una confirmación clara desde un dominio de 40+.
-4. Incluir el enlace absoluto al e-book recibido en el campo `ebookUrl`.
-5. No publicar el testimonio si `autorizacionTestimonio` es `false`.
-6. Registrar errores y evitar enviar el mismo correo varias veces si Make reintenta el escenario.
+## Procedimiento para una modificación
 
-Después de crear el escenario, configurar en Vercel:
+1. Partir de `main` actualizado; trabajar en una rama `codex/...` y conservar cambios ajenos.
+2. Revisar el alcance: web, backend, plantilla o sistema externo. Documentar efectos colaterales antes de enviar mensajes o activar flujos.
+3. Ejecutar `npm ci`, `npm run lint`, `npm run build` y `node scripts/verify-project-docs.mjs`.
+4. Revisar la vista previa: rutas directas, móvil, carrito y consentimientos. No comprar ni enviar un pedido real como prueba sin autorización.
+5. Revisar el diff y publicar un commit. Para futuros cambios conviene un PR con evidencia de verificación; la historia anterior se incorporó por fast-forward, sin PR.
+6. Incorporar a `main` sin force-push; comprobar que Vercel despliegue ese commit y que el dominio sirva la versión esperada.
+7. Si cambió Make: exportar desde su UI, sanear con el procedimiento documentado y comparar las plantillas. Un cambio en los HTML de `docs/` **no modifica** los módulos de Make automáticamente.
+8. Registrar fecha, commit, escenario y resultado en [VERIFICACION](VERIFICACION.md). Conservar el origen de la evidencia.
 
-- `EXPERIENCE_WEBHOOK_URL`
-- `EXPERIENCE_WEBHOOK_TOKEN`: clave privada del webhook de Make enviada como `x-make-apikey`
-- `PUBLIC_SITE_URL=https://cuarentamas.com`
-- `VITE_META_PIXEL_ID`
-- `VITE_TURNSTILE_SITE_KEY`
-- `TURNSTILE_SECRET_KEY`
-- `TURNSTILE_EXPECTED_ACTION=experience_form`
-- `TURNSTILE_ALLOWED_HOSTNAMES=cuarentamas.com,www.cuarentamas.com`
+## Verificaciones de producción
 
-Antes de habilitar el formulario en producción, crear el widget de Cloudflare Turnstile para el dominio y configurar sus dos claves en Vercel. El formulario queda cerrado en producción si falta la clave secreta.
+- Abrir inicio, producto, formulario y tres páginas legales directamente.
+- Comprobar que el logo `/email/logo-40plus.jpg` devuelve imagen y `Cross-Origin-Resource-Policy: cross-origin`.
+- Comprobar que el PDF devuelve `application/pdf` y `Content-Disposition: attachment; filename=Ritual-40-plus.pdf`.
+- Revisar que `/api/experiencia` no se sirva como HTML de la SPA y no almacene respuestas en caché.
+- Hacer una prueba de formulario solo con datos y destinatarios controlados; revisar el run, la escritura y ambos correos.
+- Confirmar que rechazar cookies no inicializa Meta y que aceptar permite `PageView`. Los resultados de campañas requieren otra validación.
+- En cambios de correo/DNS, verificar autenticación en un mensaje nuevo y no solo el panel.
 
-Mantener estas variables en `false` mientras el pedido continúe por WhatsApp:
+## Assets y caché
 
-- `ENABLE_TIENDANUBE_CHECKOUT=false`
-- `ENABLE_TIENDANUBE_ADMIN_ROUTES=false`
+El logo para emails tiene un año de caché `immutable`. Si cambia la imagen, crear una ruta versionada nueva y actualizar la plantilla en Make; reemplazar bytes en el mismo URL no garantiza que los correos lo vean de inmediato.
 
-SPF y DMARC ya están publicados. Falta activar DKIM en Microsoft 365/GoDaddy siguiendo `docs/DNS-CORREO.md` y probar la entrega desde el proveedor que finalmente use Make.
+El PDF conserva una URL estable. Su contenido debe actualizarse junto con la evidencia de descarga; en algunos móviles el sistema puede ofrecer abrir/guardar el archivo en lugar de guardarlo silenciosamente.
 
-## Verificación final
+## Incidentes y recuperación
 
-- Crear primero un despliegue de vista previa en Vercel.
-- Probar navegación directa al producto y a todas las políticas, además de los enlaces de WhatsApp, correo e Instagram del pie.
-- Probar el carrito en celular y escritorio, incluido el mensaje generado en WhatsApp.
-- Hacer un envío real del formulario con un correo de prueba y confirmar que llega la respuesta y el e-book.
-- Confirmar que el formulario rechaza un envío sin Turnstile y acepta uno validado.
-- Verificar que rechazar cookies no cargue el píxel de Meta y que aceptar sí lo habilite.
-- Confirmar favicon, vista previa al compartir la URL y dominio `https://cuarentamas.com`.
-- Revisar ortografía y datos legales una última vez con la persona responsable de la marca.
-- Solo después, promover el despliegue verificado a producción.
+| Síntoma | Revisar primero | Precaución |
+| --- | --- | --- |
+| La web muestra una versión antigua | Repositorio, raíz, rama y commit de Vercel | Un push al repo equivocado no actualiza este proyecto |
+| Formulario rechazado | Respuesta API, Turnstile, dominio, acción y entorno | No desactivar Turnstile para publicar rápidamente |
+| Éxito web pero falta correo o fila | Run Make y módulo que falló | `Accepted` no certifica entrega completa |
+| Correo recibido, fila `pendiente` | Configuración actual de estado | No reenviar basándose solo en esa columna |
+| Logo roto | URL, tipo de contenido y CORP | Mantener excepción limitada a recursos de email |
+| Error en Sheets después de correos | Módulos 11/12 y búsqueda de configuración | Replay puede repetir correos |
+
+Para revertir código, preparar un revert revisado o promover un despliegue anterior conocido; no reescribir el historial compartido. Los cambios externos deben revertirse por separado y con respaldo. No borrar datos de clientes ni desactivar servicios como parte de un rollback implícito.
+
+## Preparación de portafolio
+
+El repositorio permanece privado. Antes de hacerlo público, revisar historial completo, derechos de imágenes/PDF, dependencias y secretos; esta entrega solo sanea los artefactos nuevos y revisa coherencia documental, no certifica una auditoría exhaustiva. No se añade una licencia abierta a recursos del negocio.

@@ -1,0 +1,170 @@
+{
+  "name": "40+ · Experiencias y e-book Ritual 40+",
+  "flow": [
+    {
+      "id": 2,
+      "module": "gateway:CustomWebHook",
+      "version": 1,
+      "parameters": {
+        "hook": null,
+        "maxResults": 1
+      },
+      "mapper": {},
+      "metadata": {
+        "designer": {
+          "x": 0,
+          "y": 0
+        }
+      }
+    },
+    {
+      "id": 9,
+      "module": "microsoft-email:createAndSendAMessage",
+      "version": 2,
+      "parameters": {
+        "__IMTCONN__": null
+      },
+      "mapper": {
+        "content": "<html><body><h2>Nueva experiencia recibida</h2><p>Se ha recibido una nueva experiencia desde el formulario de la página web.</p><h3>DATOS DEL CLIENTE</h3><p><strong>Fecha:</strong> {{2.submittedAt}}<br><strong>Nombre:</strong> {{2.nombre}}<br><strong>Correo electrónico:</strong> {{2.email}}<br><strong>Celular:</strong> {{2.celular}}<br><strong>Ciudad:</strong> {{2.ciudad}}</p><h3>EXPERIENCIA COMPARTIDA</h3><p>{{2.experiencia}}</p><h3>INFORMACIÓN DEL FORMULARIO</h3><p><strong>Autorizó publicar su testimonio:</strong> {{2.autorizacionTestimonio}}<br><strong>Aceptó la política de tratamiento de datos:</strong> {{2.consentimiento}}<br><strong>Solicitó el e-book Ritual 40+:</strong> {{2.ebookRequested}}<br><strong>Página desde la que envió el formulario:</strong> {{2.pageUrl}}<br><strong>Identificador del registro:</strong> {{2.submissionId}}</p></body></html>",
+        "subject": "Nueva experiencia recibida — 40+",
+        "contentType": "html",
+        "toRecipients": [
+          {
+            "name": "40+ Gestión",
+            "address": "contacto@cuarentamas.com"
+          }
+        ],
+        "singleValueExtendedProperties": {}
+      },
+      "metadata": {
+        "designer": {
+          "x": 900,
+          "y": 0
+        }
+      }
+    },
+    {
+      "id": 10,
+      "module": "microsoft-email:createAndSendAMessage",
+      "version": 2,
+      "parameters": {
+        "__IMTCONN__": null
+      },
+      "mapper": {
+        "content": "<html><head><meta name=\"color-scheme\" content=\"light only\"><meta name=\"supported-color-schemes\" content=\"light only\"></head><body style=\"margin:0;padding:0;background-color:#f3f0e7;font-family:Arial,Helvetica,sans-serif;\"><table role=\"presentation\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" bgcolor=\"#f3f0e7\"><tr><td align=\"center\" style=\"padding:20px 12px;\"><table role=\"presentation\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" bgcolor=\"#ffffff\" style=\"max-width:560px;background-color:#ffffff;border:1px solid #e6e1d5;border-radius:8px;\"><tr><td align=\"center\" bgcolor=\"#124948\" style=\"padding:16px 20px;background-color:#124948;border-radius:8px 8px 0 0;\"><img src=\"https://cuarentamas.com/email/logo-40plus.jpg\" width=\"88\" alt=\"40+\" style=\"display:block;width:88px;max-width:88px;height:auto;border:0;outline:none;text-decoration:none;\"></td></tr><tr><td bgcolor=\"#ffffff\" style=\"padding:24px;color:#222222;font-size:16px;line-height:1.55;background-color:#ffffff;\"><p style=\"margin:0 0 16px;color:#222222;\">Hola {{2.nombre}},</p><p style=\"margin:0 0 16px;color:#222222;\">Gracias por compartir tu experiencia con 40+. Hemos recibido correctamente tu información.</p><p style=\"margin:0 0 18px;color:#222222;\">Tu aporte es muy valioso para nuestra comunidad y, por eso, te enviamos de regalo tu e-book Ritual 40+.</p><p style=\"margin:0 0 22px;\"><a href=\"{{2.ebookUrl}}\" target=\"_blank\" download=\"ebook-ritual-40.pdf\" style=\"display:inline-block;padding:8px 14px;background-color:#13524f;color:#ffffff;text-decoration:none;border-radius:5px;font-size:14px;line-height:20px;font-weight:600;\">Descargar mi e-book</a></p><p style=\"margin:0 0 18px;color:#222222;\">Conoce nuestro colágeno hidrolizado 40+ y empieza a incorporar este ritual a tus días.</p><p style=\"margin:0 0 24px;\"><a href=\"https://cuarentamas.com/producto/colageno-hidrolizado-40\" target=\"_blank\" style=\"display:inline-block;padding:8px 14px;background-color:#e85b2a;color:#ffffff;text-decoration:none;border-radius:5px;font-size:14px;line-height:20px;font-weight:600;\">Comprar ahora</a></p><p style=\"margin:0;color:#222222;\">Un abrazo,<br>Equipo 40+</p></td></tr></table></td></tr></table></body></html>",
+        "subject": "Gracias por compartir tu experiencia con 40+",
+        "contentType": "html",
+        "toRecipients": [
+          {
+            "address": "{{2.email}}"
+          }
+        ],
+        "singleValueExtendedProperties": {}
+      },
+      "metadata": {
+        "designer": {
+          "x": 1200,
+          "y": 0
+        }
+      }
+    },
+    {
+      "id": 11,
+      "module": "google-sheets:filterRows",
+      "version": 2,
+      "parameters": {
+        "__IMTCONN__": null
+      },
+      "mapper": {
+        "from": "drive",
+        "limit": "1",
+        "filter": [
+          [
+            {
+              "a": "A",
+              "b": "CONFIGURACION-NO-PROCESAR",
+              "o": "text:equal"
+            }
+          ]
+        ],
+        "sheetId": "Experiencias",
+        "sortOrder": "asc",
+        "spreadsheetId": "RECONNECT_PRIVATE_SPREADSHEET",
+        "tableFirstRow": "A1:Z1",
+        "includesHeaders": true,
+        "valueRenderOption": "FORMATTED_VALUE",
+        "dateTimeRenderOption": "FORMATTED_STRING"
+      },
+      "metadata": {
+        "designer": {
+          "x": 270,
+          "y": 0
+        }
+      }
+    },
+    {
+      "id": 12,
+      "module": "google-sheets:addRow",
+      "version": 2,
+      "parameters": {
+        "__IMTCONN__": null
+      },
+      "mapper": {
+        "mode": "fromAll",
+        "values": {
+          "ebook": "{{2.ebook}}",
+          "email": "{{2.email}}",
+          "ciudad": "{{2.ciudad}}",
+          "nombre": "{{2.nombre}}",
+          "source": "{{2.source}}",
+          "celular": "{{2.celular}}",
+          "pageUrl": "{{2.pageUrl}}",
+          "ebookUrl": "{{2.ebookUrl}}",
+          "estadoEnvio": "pendiente",
+          "experiencia": "{{2.experiencia}}",
+          "formVersion": "{{2.formVersion}}",
+          "submittedAt": "{{2.submittedAt}}",
+          "submissionId": "{{2.submissionId}}",
+          "consentimiento": "{{2.consentimiento}}",
+          "ebookRequested": "{{2.ebookRequested}}",
+          "politicaDatosVersion": "{{2.politicaDatosVersion}}",
+          "autorizacionTestimonio": "{{2.autorizacionTestimonio}}"
+        },
+        "sheetId": "Experiencias",
+        "spreadsheetId": "RECONNECT_PRIVATE_SPREADSHEET",
+        "includesHeaders": true,
+        "insertDataOption": "INSERT_ROWS",
+        "useColumnHeaders": true,
+        "valueInputOption": "USER_ENTERED",
+        "insertUnformatted": true
+      },
+      "metadata": {
+        "designer": {
+          "x": 538,
+          "y": 0
+        }
+      }
+    }
+  ],
+  "metadata": {
+    "instant": true,
+    "version": 1,
+    "scenario": {
+      "roundtrips": 1,
+      "maxErrors": 3,
+      "autoCommit": true,
+      "autoCommitTriggerLast": true,
+      "sequential": false,
+      "slots": null,
+      "confidential": false,
+      "dataloss": false,
+      "dlq": false,
+      "freshVariables": false
+    },
+    "designer": {
+      "orphans": []
+    },
+    "zone": "us2.make.com",
+    "notes": []
+  }
+}

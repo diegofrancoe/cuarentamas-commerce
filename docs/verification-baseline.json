@@ -1,0 +1,45 @@
+{
+  "snapshotDate": "2026-09-02",
+  "timezone": "America/Bogota",
+  "functionalCommit": "a068b6069bd3d1fe194588dca5f0292ef55627bf",
+  "make": {
+    "scenarioName": "40+ · Experiencias y e-book Ritual 40+",
+    "observedStatus": "active",
+    "executionOrder": [
+      2,
+      9,
+      10,
+      11,
+      12
+    ],
+    "lastControlledRun": "2026-09-02T19:27:26-05:00",
+    "lastControlledRunType": "replay",
+    "lastControlledRunResult": "success",
+    "operations": 5,
+    "reportedSheetRow": 9,
+    "importOfSanitizedBlueprintTested": false
+  },
+  "assets": [
+    {
+      "path": "public/email/logo-40plus.jpg",
+      "sha256": "564112d294c350aecebd8dbd387f29a3a4ef7f0cd6b08dfa6f134e0458c619bb"
+    },
+    {
+      "path": "public/downloads/ebook-ritual-40.pdf",
+      "sha256": "b4ad45691d44f048f7996dfcdc5277e6c64c738d54188afc6dc8bc258610ec31"
+    },
+    {
+      "path": "docs/automation/make.blueprint.sanitized.json",
+      "sha256": "f37cda1050cef816880760462430ea9c2cc51dabdfb0be450824fb9090ae82cc"
+    }
+  ],
+  "limitations": [
+    "No submissionId deduplication in exported Make flow",
+    "Emails precede Sheets in flow order",
+    "estadoEnvio is always pendiente; no final update mapped",
+    "USER_ENTERED is configured, not RAW",
+    "No explicit error route or HTML escaping verified",
+    "No saved external Authentication-Results pass evidence",
+    "No full payment or dispatch verification"
+  ]
+}

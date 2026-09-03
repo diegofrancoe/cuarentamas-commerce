@@ -2,7 +2,7 @@
   "name": "cuarentamas-commerce",
   "private": true,
   "version": "0.1.0",
-  "description": "Plataforma web comercial de 40+ para presentar productos, gestionar el carrito y conectar flujos de checkout y membresía.",
+  "description": "Sitio comercial de 40+ con pedidos por WhatsApp y formulario de experiencias conectado a Make, Google Sheets y correo con e-book.",
   "type": "module",
   "scripts": {
     "dev": "vite",

@@ -1,36 +1,45 @@
-# Correo del dominio: SPF, DKIM y DMARC
+# Correo del dominio — SPF, DKIM y DMARC
 
-Auditoría realizada el 31 de agosto de 2026 para `cuarentamas.com`.
+[Volver al README](../README.md) · Dominio: `cuarentamas.com` · Corte: 2026-09-02.
 
-## Estado encontrado
+## Evolución verificada
 
-| Control | Estado | Registro observado |
+El 31 de agosto se encontraron MX, SPF y DMARC publicados, pero faltaban los selectores DKIM. El 2 de septiembre se publicaron ambos CNAME en GoDaddy y se habilitó DKIM en Microsoft 365. El panel informó que se estaban aplicando firmas DKIM al dominio.
+
+| Control | Estado al corte | Referencia pública / evidencia |
 | --- | --- | --- |
-| MX | Activo | `cuarentamas-com.mail.protection.outlook.com` |
-| SPF | Activo | `v=spf1 include:secureserver.net -all` |
-| DMARC | Activo | `v=DMARC1; p=quarantine; adkim=r; aspf=r; rua=mailto:dmarc_rua@onsecureserver.net;` |
-| DKIM | Pendiente | No se encontraron los selectores habituales `selector1` y `selector2` publicados. |
-| DNS | GoDaddy | `ns63.domaincontrol.com` y `ns64.domaincontrol.com` |
+| MX | Existente en auditoría inicial | `cuarentamas-com.mail.protection.outlook.com` |
+| SPF | Existente; sin cambios en este trabajo | `v=spf1 include:secureserver.net -all` |
+| DMARC | Existente; sin cambios en este trabajo | `v=DMARC1; p=quarantine; adkim=r; aspf=r; rua=mailto:dmarc_rua@onsecureserver.net;` |
+| DNS | GoDaddy | `ns63.domaincontrol.com`, `ns64.domaincontrol.com` |
+| DKIM | CNAME publicados y firma habilitada | Resolución DNS y panel Microsoft Defender comprobados durante la configuración |
+| Remitente Make | Microsoft 365 Outlook | `contacto@cuarentamas.com`; dos mensajes recibidos en pruebas |
 
-SPF y DMARC ya están publicados. No se debe crear un segundo registro SPF: si cambia el proveedor de envío, su autorización se agrega al registro existente.
+Los registros MX/SPF/DMARC anteriores son el registro de la auditoría inicial, no una promesa de que nunca cambien. No se creó un segundo SPF ni se sustituyeron políticas durante la activación DKIM.
 
-## Activar DKIM
+## Registros DKIM aplicados
 
-1. Entrar al centro de administración de Microsoft 365 o al panel de correo de GoDaddy asociado a `cuarentamas.com`.
-2. Abrir la configuración de DKIM del dominio y copiar los dos destinos CNAME exactos que muestre el proveedor.
-3. Crear en el DNS de GoDaddy los registros para `selector1._domainkey` y `selector2._domainkey` con esos destinos.
-4. Esperar la propagación y activar la firma DKIM en el panel de correo.
-5. Enviar un correo de prueba desde la cuenta que usará Make y comprobar en los encabezados que SPF, DKIM y DMARC aparezcan como `pass`.
+| Tipo | Nombre | Destino exacto mostrado por Microsoft |
+| --- | --- | --- |
+| CNAME | `selector1._domainkey` | `selector1-cuarentamas-com._domainkey.NETORGFT19853967.k-v1.dkim.mail.microsoft` |
+| CNAME | `selector2._domainkey` | `selector2-cuarentamas-com._domainkey.NETORGFT19853967.k-v1.dkim.mail.microsoft` |
 
-Por la forma del tenant actual, los destinos pueden parecerse a:
+Estos son destinos DNS públicos, no claves privadas. Reemplazan los ejemplos orientativos que tenía la guía anterior. Para otro tenant se deben usar sus propios valores, nunca copiarlos automáticamente.
 
-- `selector1-cuarentamas-com._domainkey.NETORGFT19853967.onmicrosoft.com`
-- `selector2-cuarentamas-com._domainkey.NETORGFT19853967.onmicrosoft.com`
+Panel utilizado: [Microsoft Defender — DKIM](https://security.microsoft.com/authentication?viewid=DKIM). La administración de DNS se hizo en GoDaddy con el propietario completando las verificaciones de acceso necesarias.
 
-Estos valores son una referencia de formato. Hay que usar exactamente los que entregue el panel de Microsoft 365 antes de publicarlos.
+## Qué acredita la prueba
 
-## Decisión necesaria para Make
+Se observaron el estado habilitado, la resolución de selectores y la recepción de emails de Make. El usuario aprobó el contenido, logo y botones.
 
-La opción más simple es que Make envíe desde una cuenta real de `@cuarentamas.com` mediante el conector de Microsoft 365/Outlook. Si se elige otro proveedor de correo, primero se deben añadir sus registros de autenticación y actualizar el SPF existente sin duplicarlo.
+**No se conserva en Git una cabecera de correo que demuestre `spf=pass`, `dkim=pass` y `dmarc=pass` para un destinatario externo.** La recepción y el switch habilitado no sustituyen esa comprobación. No se garantiza entrega en bandeja principal ni ausencia de spam en todos los proveedores.
 
-No se deben guardar contraseñas, tokens o claves de correo en el repositorio. Esas credenciales se configuran únicamente en Make y en Vercel.
+## Mantenimiento
+
+1. Si cambia proveedor o tenant, obtener nuevos registros desde su panel; coordinar DNS sin duplicar SPF ni eliminar registros de la web.
+2. Tras rotación, revisar ambos selectores y un mensaje nuevo en un buzón controlado externo; inspeccionar `Authentication-Results`.
+3. Si cambian remitente o permisos, revisar las conexiones de los módulos 9 y 10 en Make.
+4. Comprobar logo y enlaces con un correo nuevo. Un mensaje antiguo no se reescribe al guardar una plantilla.
+5. Guardar solo un resumen saneado de la prueba en [VERIFICACION](VERIFICACION.md), nunca el mensaje completo con cabeceras, IDs o datos privados innecesarios.
+
+El tamaño del logo y la descarga del PDF no dependen de DKIM. Se corrigieron en el HTML y en las respuestas del hosting, respectivamente.

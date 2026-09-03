@@ -1,0 +1,112 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Payload normalizado de experiencias 40+ hacia Make",
+  "description": "Contrato documentado de salida del backend, no el cuerpo de entrada del navegador. No incluye credenciales. El backend no valida en runtime contra este archivo.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "submissionId",
+    "source",
+    "formVersion",
+    "nombre",
+    "email",
+    "celular",
+    "ciudad",
+    "direccion",
+    "mensaje",
+    "experiencia",
+    "consentimiento",
+    "autorizacionTestimonio",
+    "politicaDatosVersion",
+    "ebook",
+    "ebookRequested",
+    "ebookPath",
+    "ebookUrl",
+    "contactEmail",
+    "submittedAt",
+    "pageUrl",
+    "userAgent",
+    "ip"
+  ],
+  "properties": {
+    "submissionId": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "source": {
+      "const": "web-experiencia-ritual-40"
+    },
+    "formVersion": {
+      "const": "2026-08-31"
+    },
+    "nombre": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120
+    },
+    "email": {
+      "type": "string",
+      "format": "email",
+      "maxLength": 254
+    },
+    "celular": {
+      "type": "string",
+      "maxLength": 30
+    },
+    "ciudad": {
+      "type": "string",
+      "maxLength": 100
+    },
+    "direccion": {
+      "const": ""
+    },
+    "mensaje": {
+      "type": "string",
+      "minLength": 20,
+      "maxLength": 2000
+    },
+    "experiencia": {
+      "type": "string",
+      "minLength": 20,
+      "maxLength": 2000
+    },
+    "consentimiento": {
+      "const": true
+    },
+    "autorizacionTestimonio": {
+      "type": "boolean"
+    },
+    "politicaDatosVersion": {
+      "const": "2026-08-31"
+    },
+    "ebook": {
+      "const": "Ritual 40+"
+    },
+    "ebookRequested": {
+      "const": true
+    },
+    "ebookPath": {
+      "const": "/downloads/ebook-ritual-40.pdf"
+    },
+    "ebookUrl": {
+      "type": "string",
+      "format": "uri"
+    },
+    "contactEmail": {
+      "const": "contacto@cuarentamas.com"
+    },
+    "submittedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "pageUrl": {
+      "type": "string"
+    },
+    "userAgent": {
+      "type": "string"
+    },
+    "ip": {
+      "type": "string"
+    }
+  }
+}
