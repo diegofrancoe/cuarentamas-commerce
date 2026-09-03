@@ -1,5 +1,7 @@
 # Historia, decisiones y trazabilidad
 
+[English](HISTORIA.en.md) · **Español**
+
 [Volver al README](../README.md) · Corte: 2026-09-02, America/Bogota.
 
 ## Alcance de la reconstrucción
@@ -44,7 +46,11 @@ Las eliminaciones de componentes, imágenes y video del diseño anterior siguen 
 
 ### 1. WhatsApp reemplaza el cierre con Tiendanube
 
-La versión inicial contenía autorización OAuth, consulta de productos y creación de órdenes preliminares mediante `draft_orders`. El código solicitaba una URL de checkout, no implementaba por sí mismo un procesador de pagos.
+La primera versión de la página se construyó con un carrito conectado a Tiendanube. Contenía autorización OAuth, consulta de productos y creación de órdenes preliminares mediante `draft_orders`. El código solicitaba una URL de checkout, no implementaba por sí mismo un procesador de pagos.
+
+Después se rediseñó el sitio y se adaptó la venta para continuar por WhatsApp. Según el criterio de negocio confirmado por el responsable del proyecto, el cambio buscó reducir la inversión necesaria y facilitar la operación diaria y la atención directa al cliente. Se priorizó una solución adecuada para esa etapa del negocio frente a mantener un checkout externo activo. No se documentan cifras de ahorro ni comparaciones de tarifas no medidas.
+
+La contrapartida de esta decisión es una operación de venta asistida: la web prepara el pedido, pero el pago, la confirmación y el despacho requieren gestión humana fuera del sitio. Esta evolución demuestra una decisión de arquitectura basada en restricciones de negocio, no solo un cambio visual.
 
 El recorrido actual prepara el pedido por WhatsApp. Se retiró Tiendanube de la interfaz; quedan `api/tiendanube-checkout.js` y rutas locales protegidas por banderas `ENABLE_TIENDANUBE_CHECKOUT` y `ENABLE_TIENDANUBE_ADMIN_ROUTES`, ambas desactivadas por defecto. No hay evidencia aquí de un pago histórico completado ni de revocación externa de todas las credenciales. Reactivarlo exige otro alcance, credenciales y pruebas; no basta con encender las banderas.
 

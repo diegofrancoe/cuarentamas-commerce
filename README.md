@@ -2,88 +2,106 @@
 
 # cuarentamas — Commerce & Automation Engineering
 
-**Caso de estudio de AI Solution Engineering: de una web comercial con integraciones heredadas a una experiencia de marca conectada con operaciones reales.**
+**English** · [Español](README.es.md)
 
-[Sitio en producción](https://cuarentamas.com/) · [Producto](https://cuarentamas.com/producto/colageno-hidrolizado-40) · [Formulario](https://cuarentamas.com/comparte-tu-experiencia) · [Historia](docs/HISTORIA.md) · [Evidencia](docs/VERIFICACION.md)
+**An AI Solution Engineering case study: from a website with a Tiendanube-integrated shopping cart to a redesigned customer experience with WhatsApp-assisted sales and automated customer communications.**
 
-Proyecto desarrollado por **Diego Franco** para **cuarentamas / 40+**, marca de ZENTIA HEALTHCARE GROUP S.A.S. Integra experiencia de usuario, frontend, APIs, automatización low-code, correo de dominio, distribución de contenido y despliegue. La marca se escribe **cuarentamas** o **40+**.
+[Live website](https://cuarentamas.com/) · [Product](https://cuarentamas.com/producto/colageno-hidrolizado-40) · [Experience form](https://cuarentamas.com/comparte-tu-experiencia) · [Project history](docs/HISTORIA.en.md) · [Verification record — ES](docs/VERIFICACION.md)
 
-## La solución en una mirada
+Developed by **Diego Franco** for **cuarentamas / 40+**, a brand of ZENTIA HEALTHCARE GROUP S.A.S. The project brings together user experience, frontend development, APIs, low-code automation, domain email, digital content delivery, and deployment. The brand is written as **cuarentamas** or **40+**.
 
-Una persona puede conocer el Colágeno Hidrolizado 40+, preparar un pedido para continuar por WhatsApp o compartir su experiencia para recibir el e-book Ritual 40+. El formulario valida la solicitud en el servidor y la entrega a Make. El escenario envía un aviso interno, responde al cliente y registra la información en Google Sheets, almacenado en Drive.
+## Solution at a glance
 
-**Corte documentado: 2 de septiembre de 2026, America/Bogota.** Sitio publicado; escenario de Make activo; correo y botones aprobados por el responsable de la marca; DKIM habilitado. El flujo funciona en las pruebas registradas, pero aún tiene mejoras pendientes de deduplicación, estados y recuperación de errores. No se presenta como un sistema transaccional de entrega exactamente una vez.
+Visitors can discover Colágeno Hidrolizado 40+, prepare an order to continue through WhatsApp, or share their experience to receive the Ritual 40+ e-book. The form validates submissions on the server and passes them to Make. The scenario sends an internal notification, emails the customer, and records the information in a Google Sheets document stored in Drive.
 
-## El reto y el aporte de ingeniería
+**Documented baseline: September 2, 2026, America/Bogota.** The website is deployed, the Make scenario is active, the brand owner has approved the email and its buttons, and DKIM is enabled. The recorded tests demonstrate the working flow, while deduplication, delivery-state tracking, and error recovery still need improvement. This is not presented as an exactly-once transactional delivery system.
 
-El reto no era únicamente rediseñar una landing: había que conectar la promesa comercial con el registro de datos, la entrega del contenido y la operación de la marca, manteniendo trazabilidad entre sistemas distintos.
+## The project story
 
-| Competencia | Trabajo aplicado | Evidencia |
+**Stage 1 — a website and shopping cart integrated with Tiendanube.** The initial commercial website was built with a cart connected to Tiendanube to create draft orders and continue to the platform's checkout.
+
+**Stage 2 — a redesign and a shift to WhatsApp-assisted sales.** The brand experience was then redesigned, and the cart was adapted to prepare an order and continue the sale through WhatsApp. This was a business-led decision: reduce the investment required and make day-to-day operations and direct customer support easier.
+
+The change prioritized a solution that better fit the business at that stage, while preserving the Tiendanube integration's history in the repository. The trade-off is that payment and order confirmation happen outside the website, with human involvement. The project owner confirmed the cost and operational rationale; no unmeasured savings or pricing comparisons are claimed.
+
+**Stage 3 — connecting the customer experience to business operations.** The evolution went beyond the cart. An experience-sharing form was introduced so customers could tell their story and receive the Ritual 40+ e-book. This replaced the earlier optional membership form connected to n8n. The backend validates the submission and hands it to Make; intermediate Excel modules were replaced with Google Sheets in Drive. Microsoft 365 sends the customer an email with the e-book link and the team a separate notification containing the submitted information.
+
+**Stage 4 — making the deployed experience match the intended solution.** Testing exposed concrete issues: deployment was linked to the wrong repository, links did not reach the expected content, and the logo did not load reliably in email. The Vercel connection was corrected, the PDF download was verified, and a stable email-logo URL was published. Mobile headings and buttons were refined, the email was iterated with the owner's approval, and DKIM was enabled for the domain.
+
+**Stage 5 — verifying the result and preserving its history.** The public form was tested, both emails and the Sheets write were observed, and the owner confirmed that the branding and both buttons worked. The scenario was activated. Architecture, history, email templates, and a sanitized Make export were then documented. That review also revealed unfinished deduplication and recovery controls, which were recorded as explicit limitations rather than completed capabilities.
+
+The result is a commercial solution that evolved with business priorities, combining web development, automation, and operations. [Read the full history, commits, and decisions](docs/HISTORIA.en.md).
+
+## The challenge and engineering contribution
+
+The challenge was not just to redesign a landing page. It was to connect the customer-facing promise with data capture, content delivery, and the brand's operations, while keeping decisions traceable across separate systems.
+
+| Competency | Applied work | Evidence |
 | --- | --- | --- |
-| Diseño de soluciones | Separar presentación, validación, automatización y canales comerciales | [Arquitectura](docs/ARQUITECTURA.md) |
-| Integración full-stack + low-code | Contrato JSON entre React, API, Make, Sheets y Microsoft 365 | [Contrato y escenario](docs/MAKE.md) |
-| Ingeniería asistida por IA | Iteraciones de código, diagnóstico, documentación y pruebas con Codex, revisadas y aprobadas por el responsable | [Evolución y decisiones](docs/HISTORIA.md) |
-| Operación y entrega | Corrección del despliegue, dominio, DKIM, enlaces y carga del logo en correo | [Publicación](docs/PUBLICACION.md), [correo](docs/DNS-CORREO.md) |
-| Calidad y criterio técnico | Distinguir implementación, prueba observada y pendiente; no publicar secretos ni datos de clientes | [Verificación](docs/VERIFICACION.md) |
+| Solution design | Separate presentation, validation, automation, and sales channels | [Architecture — ES](docs/ARQUITECTURA.md) |
+| Full-stack + low-code integration | Define the JSON contract across React, the API, Make, Sheets, and Microsoft 365 | [Contract and scenario — ES](docs/MAKE.md) |
+| AI-assisted engineering | Iterate on code, diagnosis, documentation, and testing with Codex, reviewed and approved by the project owner | [Evolution and decisions](docs/HISTORIA.en.md) |
+| Delivery and operations | Correct deployment, domain email, DKIM, links, and logo rendering | [Deployment — ES](docs/PUBLICACION.md), [email — ES](docs/DNS-CORREO.md) |
+| Quality and technical judgment | Distinguish implementation, observed tests, and pending work; exclude secrets and customer data | [Verification — ES](docs/VERIFICACION.md) |
 
-**Alcance de IA:** la IA asistió el proceso de ingeniería. El producto publicado no incluye un LLM, chatbot, RAG ni decisiones automáticas basadas en IA. Make ejecuta una automatización determinista. No se atribuyen al proyecto métricas comerciales o ahorros que no fueron medidos.
+**AI scope:** AI assisted the engineering process. The deployed product does not include an LLM, chatbot, RAG system, or AI-based decision-making. Make runs deterministic automation. No unmeasured commercial results or savings are attributed to the project.
 
-## Antes → ahora
+## Before → now
 
-| Área | Base histórica del repositorio | Estado actual |
+| Area | Historical baseline | Current state |
 | --- | --- | --- |
-| Experiencia comercial | Landing, catálogo, carrito y experiencia Three.js | Diseño editorial, producto destacado clicable, recetas y navegación simplificada |
-| Cierre del pedido | Adaptador Tiendanube para crear órdenes preliminares y obtener checkout | Carrito con cantidades, envío y mensaje preparado para WhatsApp; sin cobro en la web |
-| Captación | Formulario opcional de membresía y webhook n8n | Formulario de experiencias con consentimiento y e-book, conectado a Make |
-| Registro | Configuración intermedia con módulos Microsoft Excel | Google Sheets en Drive, pestaña `Experiencias` |
-| Comunicación | Integraciones dependientes de configuración externa | Dos correos mediante Microsoft 365 desde `contacto@cuarentamas.com` |
-| Entrega digital | Sin este recorrido de e-book en el commit inicial | PDF público descargable y enlace directo al producto en el correo |
-| Confianza y publicación | Configuración inicial de sitio y correo | Turnstile, validaciones, cabeceras, consentimiento de medición y DKIM habilitado |
-| Trazabilidad | README inicial y planes de publicación | Código + historia + inventario + exportación saneada de Make + plantillas + pruebas y límites |
+| Customer experience | Landing page, catalog, cart, and Three.js experience | Editorial design, clickable hero product, recipes, and simplified navigation |
+| Order flow | Website with a Tiendanube-integrated cart, draft orders, and checkout | Cart redesigned around WhatsApp for investment and operational simplicity; no on-site payment |
+| Customer engagement | Optional membership form and n8n webhook | Consent-based experience form with e-book delivery through Make |
+| Records | Intermediate configuration using Microsoft Excel modules | Google Sheets in Drive, `Experiencias` tab |
+| Communications | Integrations dependent on external configuration | Two emails through Microsoft 365 from `contacto@cuarentamas.com` |
+| Digital delivery | No equivalent e-book journey in the initial commit | Public downloadable PDF and direct product link in the email |
+| Trust and deployment | Initial website and email setup | Turnstile, validation, response headers, analytics consent, and enabled DKIM |
+| Traceability | Initial README and deployment plans | Code, history, integration inventory, sanitized Make export, templates, tests, and limitations |
 
-La base histórica está en [`d307c97`](https://github.com/diegofrancoe/cuarentamas-commerce/commit/d307c97); el corte funcional aprobado está en [`a068b60`](https://github.com/diegofrancoe/cuarentamas-commerce/commit/a068b60). Los ajustes realizados en SaaS no aparecen automáticamente como commits: se registran por separado en la documentación.
+The historical baseline is [`d307c97`](https://github.com/diegofrancoe/cuarentamas-commerce/commit/d307c97); the approved functional baseline is [`a068b60`](https://github.com/diegofrancoe/cuarentamas-commerce/commit/a068b60). Changes made in SaaS platforms do not automatically become Git commits; they are documented separately.
 
-## Arquitectura operativa
+## Operational architecture
 
 ```mermaid
 flowchart TD
     G[GitHub / main] --> V[Vercel / cuarentamas.com]
-    V --> W[React: landing, producto y carrito]
-    W --> WA[WhatsApp: resumen de pedido, sin cobro]
-    W --> S[Instagram, correo y páginas legales]
-    W --> F[Formulario de experiencias]
+    V --> W[React: landing, product and cart]
+    W --> WA[WhatsApp: order summary, no payment]
+    W --> S[Instagram, email and legal pages]
+    W --> F[Customer experience form]
     F --> A[POST /api/experiencia]
-    A --> T[Validación Cloudflare Turnstile]
+    A --> T[Cloudflare Turnstile validation]
     T --> M[Make: webhook 2]
-    M --> I[Correo interno 9 / Microsoft 365]
-    I --> C[Correo cliente 10 / Microsoft 365]
+    M --> I[Internal email 9 / Microsoft 365]
+    I --> C[Customer email 10 / Microsoft 365]
     C --> Q[Sheets Search Rows 11]
-    Q --> R[Sheets Add a Row 12 / archivo en Drive]
-    C -. enlaces .-> P[PDF, logo y página del producto en Vercel]
+    Q --> R[Sheets Add a Row 12 / document in Drive]
+    C -. links .-> P[PDF, logo and product page on Vercel]
 ```
 
-El orden de Make corresponde al `flow` exportado, no a las posiciones visuales de los módulos en el lienzo. La búsqueda actual no implementa deduplicación por `submissionId`. [Detalle exacto y consecuencias](docs/MAKE.md).
+Make's sequence reflects the exported `flow`, not the modules' visual positions on the canvas. The current search does not implement deduplication by `submissionId`. [Exact configuration and implications — ES](docs/MAKE.md).
 
-## Qué incluye
+## Included capabilities
 
-- Landing responsive, navegación al producto desde el hero, recetas y modal de preparación.
-- Ficha de producto con imágenes frontal/posterior, información nutricional, uso, advertencias y datos del fabricante.
-- Carrito en memoria, cantidades, resumen, tarifas de envío y apertura de WhatsApp con datos del pedido. La persona debe enviar el mensaje; la web no confirma pago ni despacho.
-- Formulario con campos obligatorios, consentimiento de datos, autorización testimonial separada, honeypot, tiempo mínimo y Turnstile verificado en servidor.
-- Registro y envío de dos correos en Make: notificación interna y e-book para el cliente.
-- Correo HTML aprobado: logo de 88 px, tipografía neutra y botones compactos. El PDF va **como enlace de descarga**, no como adjunto.
-- SEO por ruta, metadatos sociales, sitemap, favicon y Meta Pixel `PageView` condicionado al consentimiento.
-- Documentación de la integración histórica Tiendanube y del flujo n8n retirado, sin reactivarlos.
+- Responsive landing page, hero-to-product navigation, recipes, and a preparation modal.
+- Product page with front/back images, nutrition information, usage, warnings, and manufacturer details.
+- In-memory cart, quantities, order summary, shipping rates, and WhatsApp handoff with order details. The customer must send the message; the website does not confirm payment or dispatch.
+- Form with required fields, data consent, separate testimonial permission, a honeypot, minimum submission time, and server-verified Turnstile.
+- Record creation and two emails in Make: an internal notification and customer e-book delivery.
+- Approved HTML email: 88 px logo, neutral typography, and compact buttons. The PDF is delivered **as a download link**, not an attachment.
+- Route-specific SEO, social metadata, sitemap, favicon, and consent-gated Meta Pixel `PageView` tracking.
+- Documentation of the historical Tiendanube integration and retired n8n flow, without reactivating them.
 
-## Stack y límites del alcance
+## Stack and scope boundaries
 
-React 19 · React Router 7 · Vite 7 · CSS / Tailwind CSS 3 · Node.js · Express · Axios · Vercel Functions · Make · Google Sheets / Drive · Microsoft 365 Outlook · Cloudflare Turnstile · DNS GoDaddy.
+React 19 · React Router 7 · Vite 7 · CSS / Tailwind CSS 3 · Node.js · Express · Axios · Vercel Functions · Make · Google Sheets / Drive · Microsoft 365 Outlook · Cloudflare Turnstile · GoDaddy DNS.
 
-Three.js permanece como dependencia heredada, pero la interfaz actual usa composición de imágenes y CSS: no hay un visor WebGL activo. No hay POS, inventario sincronizado, pagos online activos, WhatsApp Business API, CRM completo ni publicación automática de testimonios.
+Three.js remains a legacy dependency, but the current interface uses image composition and CSS: there is no active WebGL viewer. The solution does not include a POS, synchronized inventory, active online payments, WhatsApp Business API, a full CRM, or automatic testimonial publishing.
 
-## Ejecutar localmente
+## Run locally
 
-Requisito: Node.js compatible con la versión fijada por `package-lock.json` (el paquete Vite instalado declara `^20.19.0 || >=22.12.0`) y npm.
+Requirements: npm and a Node.js version compatible with `package-lock.json` (the installed Vite package declares `^20.19.0 || >=22.12.0`).
 
 ```bash
 npm ci
@@ -91,15 +109,15 @@ cp .env.example .env
 npm run dev
 ```
 
-En otra terminal:
+In a separate terminal:
 
 ```bash
 npm run server
 ```
 
-Vite atiende el frontend y redirige `/api` al servidor local en `localhost:4000`. Conservar `PORT=4000` o ajustar también el proxy. `npm run preview` sirve la compilación estática; no sustituye las funciones de Vercel ni el backend local.
+Vite serves the frontend and proxies `/api` to the local server at `localhost:4000`. Keep `PORT=4000` or update the proxy as well. `npm run preview` serves the static build; it does not replace Vercel Functions or the local backend.
 
-El formulario necesita configuración privada para llegar a Make. **No conectar pruebas locales a un escenario productivo sin preparar sus destinatarios y efectos.** Las claves de desarrollo de Turnstile no son válidas para producción. [Configuración y operación](docs/PUBLICACION.md).
+The form needs private configuration to reach Make. **Do not connect local tests to a production scenario without preparing its recipients and side effects.** Development Turnstile keys are not valid for production. [Configuration and operations — ES](docs/PUBLICACION.md).
 
 ```bash
 npm run lint
@@ -107,33 +125,35 @@ npm run build
 node scripts/verify-project-docs.mjs
 ```
 
-## Mapa del repositorio
+## Repository map
 
 ```text
-src/                     Interfaz, rutas, carrito, contenido y medición
-api/                     Experiencias y adaptador Tiendanube deshabilitado
-server/                  Backend local y verificación Turnstile compartida
-public/downloads/        E-book Ritual 40+
-public/email/            Logo estable para clientes de correo
-docs/                    Arquitectura, decisiones, operación y evidencia
-docs/automation/         Blueprint saneado, contrato, encabezados y emails
-scripts/                 Verificación de coherencia documental
+src/                     Interface, routes, cart, content and analytics
+api/                     Experience endpoint and disabled Tiendanube adapter
+server/                  Local backend and shared Turnstile verification
+public/downloads/        Ritual 40+ e-book
+public/email/            Stable logo for email clients
+docs/                    Architecture, decisions, operations and evidence
+docs/automation/         Sanitized blueprint, contract, headers and emails
+scripts/                 Documentation consistency checks
 ```
 
-| Documento | Para qué sirve |
+The README and full project history are available in English and Spanish. Detailed operational documents remain in Spanish and are labeled **ES** below. Approved customer-facing emails remain in Spanish.
+
+| Document | Purpose |
 | --- | --- |
-| [Historia y decisiones](docs/HISTORIA.md) | Antes, iteraciones, incidentes resueltos, Tiendanube y n8n |
-| [Arquitectura](docs/ARQUITECTURA.md) | Fronteras, contrato y recorrido de los datos |
-| [Inventario de integraciones](docs/INTEGRACIONES.md) | WhatsApp, redes, correo, Drive, Sheets, Make, DNS y hosting |
-| [Make](docs/MAKE.md) | Configuración observada, mapeos, límites y restauración |
-| [Publicación y mantenimiento](docs/PUBLICACION.md) | Entorno, Git, Vercel, operación y rollback |
-| [Correo y DNS](docs/DNS-CORREO.md) | SPF, DKIM, DMARC y entrega |
-| [Verificación](docs/VERIFICACION.md) | Qué se probó, cómo y qué no se debe afirmar todavía |
+| [History and decisions](docs/HISTORIA.en.md) | Baseline, iterations, resolved incidents, Tiendanube, and n8n |
+| [Architecture — ES](docs/ARQUITECTURA.md) | Boundaries, contract, and data flow |
+| [Integration inventory — ES](docs/INTEGRACIONES.md) | WhatsApp, social channels, email, Drive, Sheets, Make, DNS, and hosting |
+| [Make — ES](docs/MAKE.md) | Observed configuration, mappings, limitations, and restoration |
+| [Deployment and maintenance — ES](docs/PUBLICACION.md) | Environments, Git, Vercel, operations, and rollback |
+| [Email and DNS — ES](docs/DNS-CORREO.md) | SPF, DKIM, DMARC, and delivery |
+| [Verification — ES](docs/VERIFICACION.md) | What was tested, how, and what is not yet demonstrated |
 
-## Trazabilidad y uso como portafolio
+## Traceability and portfolio use
 
-La aplicación funcional aprobada ya estaba en `origin/main` mediante avance **fast-forward**, sin PR ni commit de merge separado. La [historia](docs/HISTORIA.md) explica esa diferencia; no se inventa una revisión por PR que no existió.
+The approved application was already in `origin/main` through a **fast-forward** update, without a pull request or a separate merge commit. The [history](docs/HISTORIA.en.md) explains the distinction; no PR review that did not happen is claimed.
 
-El repositorio sigue **privado**. Un enlace no da acceso a un reclutador sin permisos. Cambiarlo a público requiere una revisión separada de todo el historial, activos y derechos de distribución; no basta con revisar el último README. El código y los recursos de marca no incluyen una licencia de reutilización abierta.
+The repository remains **private**. A link alone does not give a recruiter access. Making it public requires a separate review of the full history, assets, and distribution rights; reviewing only the latest README is not enough. The code and brand assets do not include an open reuse license.
 
-El respaldo de Make excluye conexiones privadas, identificadores de webhook/hoja y datos de ejecución. No es infraestructura desplegada automáticamente por Git: cualquier cambio en Make, DNS, Drive o Microsoft 365 debe volver a documentarse y probarse. Esta entrega no agrega contraseñas, secretos, conversaciones ni testimonios de clientes.
+The Make backup excludes private connections, webhook/spreadsheet identifiers, and execution data. It is not infrastructure automatically deployed by Git: changes to Make, DNS, Drive, or Microsoft 365 must be documented and tested again. This documentation does not add passwords, secrets, conversations, or customer testimonials.

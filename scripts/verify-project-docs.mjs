@@ -80,7 +80,11 @@ for (const column of Object.keys(modules.get(12).mapper.values)) {
 }
 assert.deepEqual(columns.slice(-3), ["estadoEnvio", "fechaEnvio", "errorEnvio"]);
 
-const markdownFiles = ["README.md"];
+const markdownFiles = ["README.md", "README.es.md"];
+assert.ok(read("README.md").includes("[Español](README.es.md)"), "Missing Spanish language link");
+assert.ok(read("README.es.md").includes("[English](README.md)"), "Missing English language link");
+assert.ok(read("docs/HISTORIA.md").includes("[English](HISTORIA.en.md)"), "Missing English history link");
+assert.ok(read("docs/HISTORIA.en.md").includes("[Español](HISTORIA.md)"), "Missing Spanish history link");
 const walk = (directory) => {
   for (const entry of readdirSync(path.join(root, directory), { withFileTypes: true })) {
     const relative = path.join(directory, entry.name);
