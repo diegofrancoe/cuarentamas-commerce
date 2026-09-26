@@ -154,6 +154,6 @@ The README and full project history are available in English and Spanish. Detail
 
 The approved application was already in `origin/main` through a **fast-forward** update, without a pull request or a separate merge commit. The [history](docs/HISTORIA.en.md) explains the distinction; no PR review that did not happen is claimed.
 
-The repository remains **private**. A link alone does not give a recruiter access. Making it public requires a separate review of the full history, assets, and distribution rights; reviewing only the latest README is not enough. The code and brand assets do not include an open reuse license.
+This repository is prepared as public portfolio evidence. Its history, assets and sanitized automation documentation were reviewed before release. Public visibility does not grant reuse rights: the code, brand assets, product material and visual content do not include an open-source or open-content license.
 
 The Make backup excludes private connections, webhook/spreadsheet identifiers, and execution data. It is not infrastructure automatically deployed by Git: changes to Make, DNS, Drive, or Microsoft 365 must be documented and tested again. This documentation does not add passwords, secrets, conversations, or customer testimonials.
