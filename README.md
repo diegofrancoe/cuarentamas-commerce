@@ -1,6 +1,6 @@
 <p align="center"><img src="public/email/logo-40plus.jpg" alt="40+" width="100"></p>
 
-# cuarentamas — Commerce & Automation Engineering
+# 40+ — E-commerce & Automation
 
 **English** · [Español](README.es.md)
 
