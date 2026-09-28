@@ -1,4 +1,4 @@
-<p align="center"><img src="src/assets/brand/logo-40plus-green.jpg" alt="40+" width="140"></p>
+<p align="center"><img src="src/assets/brand/logo-40plus.jpg" alt="40+" width="260"></p>
 
 # 40+ — E-commerce & Automation
 
