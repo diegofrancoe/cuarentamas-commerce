@@ -1,17 +1,4 @@
-<p align="center"><img src="src/assets/brand/logo-40plus.jpg" alt="40+" width="230"></p>
-
-<h1 align="center">40+ — E-commerce & Automation</h1>
-<p align="center"><strong>Commerce experience · WhatsApp-assisted sales · Ritual 40+ · automated customer communication</strong></p>
-<p align="center"><a href="https://cuarentamas.com/"><strong>Live website</strong></a> · <a href="https://www.diegofrancoe.com/proyectos/40-plus"><strong>Case study</strong></a></p>
-
-40+ is a responsive commerce experience for a Colombian collagen brand. Customers discover the product and prepare an order that continues through WhatsApp, while the Ritual 40+ journey securely captures submissions, delivers an e-book and sends customer information internally for follow-up.
-
-| E-commerce | WhatsApp | Ritual 40+ | Automation |
-|---|---|---|---|
-| Product + cart experience | Assisted purchase handoff | Secure form + e-book | Make + email + Sheets |
-
-### Tech stack
-![React](https://img.shields.io/badge/React-20232A?logo=react) ![Vite](https://img.shields.io/badge/Vite-20232A?logo=vite) ![Tailwind](https://img.shields.io/badge/Tailwind-20232A?logo=tailwindcss) ![Make](https://img.shields.io/badge/Make-20232A?logo=make) ![Vercel](https://img.shields.io/badge/Vercel-20232A?logo=vercel)
+<p align="center"><img src="docs/readme-hero.svg" alt="Project overview" width="100%"></p>
 
 ### Architecture
 ~~~mermaid
