@@ -1,12 +1,12 @@
-<p align="center"><img src="public/email/logo-40plus.jpg" alt="40+" width="100"></p>
+<p align="center"><img src="src/assets/brand/logo-40plus-green.jpg" alt="40+" width="140"></p>
 
 # 40+ — E-commerce & Automation
 
 **English** · [Español](README.es.md)
 
-**An AI Solution Engineering case study: from a website with a Tiendanube-integrated shopping cart to a redesigned customer experience with WhatsApp-assisted sales and automated customer communications.**
+**E-commerce experience · WhatsApp-assisted sales · secure lead capture · automated customer communication.**
 
-[Live website](https://cuarentamas.com/) · [Product](https://cuarentamas.com/producto/colageno-hidrolizado-40) · [Experience form](https://cuarentamas.com/comparte-tu-experiencia) · [Project history](docs/HISTORIA.en.md) · [Verification record — ES](docs/VERIFICACION.md)
+[Live website](https://cuarentamas.com/) · [Product](https://cuarentamas.com/producto/colageno-hidrolizado-40) · [Ritual 40+](https://cuarentamas.com/comparte-tu-experiencia) · [Case study](https://www.diegofrancoe.com/proyectos/40-plus) · [Technical docs](docs/)
 
 Developed by **Diego Franco** for **cuarentamas / 40+**, a brand of ZENTIA HEALTHCARE GROUP S.A.S. The project brings together user experience, frontend development, APIs, low-code automation, domain email, digital content delivery, and deployment. The brand is written as **cuarentamas** or **40+**.
 
@@ -14,7 +14,7 @@ Developed by **Diego Franco** for **cuarentamas / 40+**, a brand of ZENTIA HEALT
 
 Visitors can discover Colágeno Hidrolizado 40+, prepare an order to continue through WhatsApp, or share their experience to receive the Ritual 40+ e-book. The form validates submissions on the server and passes them to Make. The scenario sends an internal notification, emails the customer, and records the information in a Google Sheets document stored in Drive.
 
-**Documented baseline: September 2, 2026, America/Bogota.** The website is deployed, the Make scenario is active, the brand owner has approved the email and its buttons, and DKIM is enabled. The recorded tests demonstrate the working flow, while deduplication, delivery-state tracking, and error recovery still need improvement. This is not presented as an exactly-once transactional delivery system.
+The current purchase journey connects customers directly to WhatsApp. The architecture can also support optional integrations such as payment providers, a custom CRM and additional commerce or customer-automation workflows.
 
 ## The project story
 
