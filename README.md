@@ -1,46 +1,34 @@
-<p align="center"><img src="src/assets/brand/logo-40plus.jpg" alt="40+" width="260"></p>
+<p align="center"><img src="src/assets/brand/logo-40plus.jpg" alt="40+" width="230"></p>
 
-# 40+ — E-commerce & Automation
+<h1 align="center">40+ — E-commerce & Automation</h1>
+<p align="center"><strong>Commerce experience · WhatsApp-assisted sales · Ritual 40+ · automated customer communication</strong></p>
+<p align="center"><a href="https://cuarentamas.com/"><strong>Live website</strong></a> · <a href="https://www.diegofrancoe.com/proyectos/40-plus"><strong>Case study</strong></a></p>
 
-**E-commerce · WhatsApp-assisted sales · secure lead capture · automated communication**
+40+ is a responsive commerce experience for a Colombian collagen brand. Customers discover the product and prepare an order that continues through WhatsApp, while the Ritual 40+ journey securely captures submissions, delivers an e-book and sends customer information internally for follow-up.
 
-[Live website](https://cuarentamas.com/) · [Product](https://cuarentamas.com/producto/colageno-hidrolizado-40) · [Ritual 40+](https://cuarentamas.com/comparte-tu-experiencia) · [Case study](https://www.diegofrancoe.com/proyectos/40-plus)
+| E-commerce | WhatsApp | Ritual 40+ | Automation |
+|---|---|---|---|
+| Product + cart experience | Assisted purchase handoff | Secure form + e-book | Make + email + Sheets |
 
-40+ is a responsive commerce experience for a Colombian collagen brand. Customers discover the product and prepare an order that continues through WhatsApp, while the Ritual 40+ journey securely captures customer submissions, delivers an e-book automatically and sends the information internally for follow-up.
+### Tech stack
+![React](https://img.shields.io/badge/React-20232A?logo=react) ![Vite](https://img.shields.io/badge/Vite-20232A?logo=vite) ![Tailwind](https://img.shields.io/badge/Tailwind-20232A?logo=tailwindcss) ![Make](https://img.shields.io/badge/Make-20232A?logo=make) ![Vercel](https://img.shields.io/badge/Vercel-20232A?logo=vercel)
 
-## Highlights
-
-- Responsive brand and product experience.
-- Product page, cart, quantities and WhatsApp order handoff.
-- Ritual 40+ form with server validation and Cloudflare Turnstile.
-- Make automation for internal notification and customer communication.
-- Automatic Ritual 40+ e-book delivery.
-- Google Sheets / Drive record flow.
-- SEO, consent-aware analytics and Vercel deployment.
-- Architecture open to optional payment-provider, CRM and additional automation integrations.
-
-## Architecture
-
+### Architecture
 ~~~mermaid
 flowchart LR
  U[Customer] --> W[React + Vite]
  W --> WA[WhatsApp purchase]
- W --> F[Ritual 40+ form]
- F --> API[Server validation]
- API --> T[Turnstile]
- T --> M[Make]
+ W --> F[Ritual 40+]
+ F --> API[Validation + Turnstile]
+ API --> M[Make]
  M --> E[Customer email + e-book]
  M --> I[Internal notification]
  M --> S[Sheets / Drive]
- W -. optional .-> PAY[Payment providers]
- S -. optional .-> CRM[Custom CRM]
+ W -. optional .-> PAY[Payments]
+ S -. optional .-> CRM[CRM]
 ~~~
 
-## Stack
-
-React 19 · React Router · Vite · JavaScript · CSS / Tailwind CSS · Node.js · Express · Vercel Functions · Make · Google Sheets / Drive · Microsoft 365 · Cloudflare Turnstile
-
-## Run locally
+<details><summary><strong>Run locally & repository structure</strong></summary>
 
 ~~~bash
 npm ci
@@ -48,20 +36,15 @@ cp .env.example .env
 npm run dev
 ~~~
 
-Private webhook URLs, credentials and customer data are not stored in the repository.
-
-## Project structure
-
 ~~~text
 src/        UI, product experience and cart
 api/        Secure experience endpoint
-server/     Local backend and validation
-public/     E-book and public email assets
-docs/       Architecture and sanitized automation documentation
+server/     Validation
+public/     E-book and email assets
+docs/       Architecture + sanitized automation docs
 ~~~
+</details>
 
-The current website does not process online payments and does not include a full CRM. Purchases continue through WhatsApp; payments and CRM are optional integrations.
+The current purchase flow continues through WhatsApp. Payments and CRM are optional integrations, not current production features.
 
-**Production:** https://cuarentamas.com/
-
-Built by **Diego Franco**.
+<p align="center"><strong>Production:</strong> https://cuarentamas.com/</p>
