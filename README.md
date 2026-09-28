@@ -1,4 +1,8 @@
-<p align="center"><img src="docs/readme-hero.svg" alt="Project overview" width="100%"></p>
+<p align="center"><a href="https://cuarentamas.com/"><img src="docs/readme-hero.svg" alt="Project overview" width="100%"></a></p>
+
+<p align="center"><a href="https://cuarentamas.com/"><strong>Live website</strong></a> · <a href="https://www.diegofrancoe.com/proyectos/40-plus"><strong>Case study</strong></a></p>
+
+40+ combines a responsive commerce experience with WhatsApp-assisted purchasing and automated customer communication. The Ritual 40+ flow validates customer submissions, delivers the e-book and sends information internally for follow-up. Payment providers and a custom CRM remain optional integrations rather than current production features.
 
 ### Architecture
 ~~~mermaid
