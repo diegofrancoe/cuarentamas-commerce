@@ -2,6 +2,9 @@
 
 40+ combines a responsive commerce experience with WhatsApp-assisted purchasing and automated customer communication. The Ritual 40+ flow validates customer submissions, delivers the e-book and sends information internally for follow-up. Payment providers and a custom CRM remain optional integrations rather than current production features.
 
+### Core stack
+![React](https://img.shields.io/badge/React-252824?style=flat-square&logo=react&logoColor=74CDA7) ![Vite](https://img.shields.io/badge/Vite-252824?style=flat-square&logo=vite&logoColor=74CDA7) ![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-252824?style=flat-square&logo=tailwindcss&logoColor=74CDA7) ![Make](https://img.shields.io/badge/Make-252824?style=flat-square&logo=make&logoColor=74CDA7) ![Vercel](https://img.shields.io/badge/Vercel-252824?style=flat-square&logo=vercel&logoColor=74CDA7)
+
 ### Architecture
 ~~~mermaid
 flowchart LR
